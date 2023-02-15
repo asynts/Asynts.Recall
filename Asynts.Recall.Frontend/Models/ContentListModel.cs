@@ -42,7 +42,7 @@ namespace Asynts.Recall.Frontend.Models
             {
                 Id = 0,
                 Title = "Hello, world!",
-                Contents = "Hello to everyone!\nThis is an example.\n",
+                Contents = "Hello to everyone!\nThis is an example.",
                 Tags = new List<string>
                 {
                     "hello/",
@@ -53,7 +53,7 @@ namespace Asynts.Recall.Frontend.Models
             {
                 Id = 1,
                 Title = "Another Example",
-                Contents = "This is another example.\n",
+                Contents = "This is another example.",
                 Tags = new List<string>
                 {
                     "notes/example/",

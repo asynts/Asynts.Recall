@@ -8,16 +8,10 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ContentListView">
 
-    <ListView ItemsSource="{Binding ContentList}">
-        <ListView.ItemContainerStyle>
-            <Style TargetType="ListViewItem">
-                <Setter Property="Focusable" Value="False" />
-            </Style>
-        </ListView.ItemContainerStyle>
-        
-        <ListView.ItemTemplate>
+    <ItemsControl ItemsSource="{Binding ContentList}" Padding="2px">
+        <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <Grid>
+                <Grid Background="Blue" Margin="2px">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
@@ -28,10 +22,21 @@
                     </Grid.RowDefinitions>
 
                     <Label Content="{Binding Path=Title}" Grid.Row="0" Grid.Column="0" FontSize="16pt" />
-                    <Label Content="FIXME: tags" Grid.Row="1" Grid.Column="0" />
-                    <Label Content="{Binding Path=Contents}" Grid.Row="2" Grid.Column="0" />
+                    <ItemsControl ItemsSource="{Binding Path=Tags}" Grid.Row="1" Grid.Column="0" Margin="2px">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Path=.}" Padding="4px" Background="Red" Margin="2px" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>    
+                    </ItemsControl>
+                    <Label Content="{Binding Path=Contents}" Grid.Row="2" Grid.Column="0" Background="Green" />
                 </Grid>
             </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
 </Page>
