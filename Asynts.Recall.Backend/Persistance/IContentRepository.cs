@@ -2,10 +2,9 @@
 
 using Asynts.Recall.Backend.Persistance.Data;
 
-namespace Asynts.Recall.Backend.Persistance
+namespace Asynts.Recall.Backend.Persistance;
+
+public interface IContentRepository
 {
-    public interface IContentRepository
-    {
-        IEnumerable<ContentData> All();
-    }
+    IEnumerable<ContentData> All();
 }
