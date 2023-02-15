@@ -9,6 +9,12 @@
       Title="ContentListView">
 
     <ListView ItemsSource="{Binding ContentList}">
+        <ListView.ItemContainerStyle>
+            <Style TargetType="ListViewItem">
+                <Setter Property="Focusable" Value="False" />
+            </Style>
+        </ListView.ItemContainerStyle>
+        
         <ListView.ItemTemplate>
             <DataTemplate>
                 <Grid>
