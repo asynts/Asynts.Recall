@@ -11,9 +11,12 @@ public partial class MainWindow : Window
 {
     public MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext;
 
-    public MainWindow()
+    // For design only.
+    public MainWindow() { }
+
+    public MainWindow(MainWindowViewModel mainWindowViewModel)
     {
         InitializeComponent();
-        DataContext = new MainWindowViewModel();
+        DataContext = mainWindowViewModel;
     }
 }

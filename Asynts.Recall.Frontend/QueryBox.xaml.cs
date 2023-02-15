@@ -19,9 +19,9 @@ namespace Asynts.Recall.Frontend
 
         public QueryBoxViewModel ViewModel => (QueryBoxViewModel)DataContext;
 
-        private void OnKeyDownHandler(object sender, KeyEventArgs e)
+        private void OnKeyDownHandler(object sender, KeyEventArgs eventArgs)
         {
-            if (e.Key == Key.Enter)
+            if (eventArgs.Key == Key.Enter)
             {
                 ViewModel.SubmitQuery();
             }

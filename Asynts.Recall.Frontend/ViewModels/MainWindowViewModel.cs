@@ -1,13 +1,14 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Asynts.Recall.Backend.Persistance;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Asynts.Recall.Frontend.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
-    public MainWindowViewModel()
+    public MainWindowViewModel(ContentListViewModel contentListVM, QueryBoxViewModel queryBoxVM)
     {
-        contentListVM = new ContentListViewModel();
-        queryBoxVM = new QueryBoxViewModel(contentListVM);
+        this.queryBoxVM = queryBoxVM;
+        this.contentListVM = contentListVM;
     }
 
     [ObservableProperty]

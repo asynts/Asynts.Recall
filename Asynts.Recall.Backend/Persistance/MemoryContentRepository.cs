@@ -22,4 +22,33 @@ public class MemoryContentRepository : IContentRepository
     {
         return contentList;
     }
+
+    // FIXME: Move this somewhere else.
+    public void LoadExampleData()
+    {
+        contentList.Clear();
+
+        Add(new ContentData
+        {
+            Id = 0,
+            Title = "Hello, world!",
+            Contents = "Hello to everyone!\nThis is an example.",
+            Tags = new List<string>
+            {
+                "hello/",
+                "notes/example/",
+            },
+        });
+        Add(new ContentData
+        {
+            Id = 1,
+            Title = "Another Example",
+            Contents = "This is another example.",
+            Tags = new List<string>
+            {
+                "notes/example/",
+                "special/",
+            },
+        });
+    }
 }

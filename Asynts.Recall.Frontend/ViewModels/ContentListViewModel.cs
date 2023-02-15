@@ -1,39 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
+using CommunityToolkit.Mvvm.ComponentModel;
+
 using Asynts.Recall.Backend.Persistance;
 using Asynts.Recall.Backend.Persistance.Data;
-using CommunityToolkit.Mvvm.Input;
 
 namespace Asynts.Recall.Frontend.ViewModels;
 
-// FIXME: Make this Observable.
-public class ContentListViewModel
+public partial class ContentListViewModel : ObservableObject
 {
-    readonly MemoryContentRepository _memoryContentRepository;
-    readonly SearchEngine _searchEngine;
+    readonly IContentRepository _memoryContentRepository;
+    readonly ISearchEngine _searchEngine;
 
-    public ContentListViewModel()
+    public ContentListViewModel(IContentRepository memoryContentRepository, ISearchEngine searchEngine)
     {
-        // FIXME: Use dependency injection here.
+        _memoryContentRepository = memoryContentRepository;
+        _searchEngine = searchEngine;
 
-        _memoryContentRepository = new MemoryContentRepository();
-        AddExampleData();
-
-        _searchEngine = new SearchEngine(_memoryContentRepository);
-
-        // FIXME: Get this from the user and use a better default.
-        ContentList = _searchEngine.Search(new SearchQueryData
+        SetSearchQuery(new SearchQueryData
         {
-            RequiredTags = new List<string>
-            {
-                "hello/",
-            },
-            InterestingTerms = new List<string>
-            {
-                "world/",
-            },
+            RequiredTags = new List<string>(),
+            InterestingTerms = new List<string>(),
             RawTextQuery = "",
-        }).ToList();
+        });
     }
 
     public void SetSearchQuery(SearchQueryData searchQueryData)
@@ -41,31 +31,6 @@ public class ContentListViewModel
         ContentList = _searchEngine.Search(searchQueryData).ToList();
     }
 
-    public IList<ContentData> ContentList { get; set; }
-
-    private void AddExampleData()
-    {
-        _memoryContentRepository.Add(new ContentData
-        {
-            Id = 0,
-            Title = "Hello, world!",
-            Contents = "Hello to everyone!\nThis is an example.",
-            Tags = new List<string>
-            {
-                "hello/",
-                "notes/example/",
-            },
-        });
-        _memoryContentRepository.Add(new ContentData
-        {
-            Id = 1,
-            Title = "Another Example",
-            Contents = "This is another example.",
-            Tags = new List<string>
-            {
-                "notes/example/",
-                "special/",
-            },
-        });
-    }
+    [ObservableProperty]
+    private IList<ContentData> contentList = new List<ContentData>();
 }
