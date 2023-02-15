@@ -7,7 +7,7 @@ namespace Asynts.Recall.Frontend
     /// <summary>
     /// Interaction logic for ContentListView.xaml
     /// </summary>
-    public partial class ContentListView : Page
+    public partial class ContentListView : UserControl
     {
         public ContentListView()
         {
