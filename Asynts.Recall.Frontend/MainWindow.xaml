@@ -7,21 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <StackPanel>
-        <!-- FIXME: There has to be a better way of achiving this.
-                    There is probably already a library for this, or I could add a custom wrapper.
-                    https://stackoverflow.com/a/16666975/8746648 -->
-        <Grid Margin="4px">
-            <TextBlock Margin="5px,2px" Text="Query... ([tag]; each word individually; case-insensitive)"
-                       Visibility="{Binding ElementName=refQuery, Path=Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       Foreground="Gray" />
-            <TextBox Name="refQuery" Padding="2px" Background="Transparent" />
-        </Grid>
-        <Grid Margin="4px">
-            <TextBlock Margin="5px,2px" Text="Raw Query... (whitespace included; case-sensitive)"
-                       Visibility="{Binding ElementName=refRawQuery, Path=Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       Foreground="Gray" />
-            <TextBox Name="refRawQuery" Padding="2px" Background="Transparent" />
-        </Grid>
+        <local:QueryBox />
 
         <Separator Background="Black" Margin="0" />
         
