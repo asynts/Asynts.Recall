@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-using Asynts.Recall.Frontend.Models;
+using Asynts.Recall.Frontend.ViewModels;
 
 namespace Asynts.Recall.Frontend
 {
@@ -9,11 +9,11 @@ namespace Asynts.Recall.Frontend
     /// </summary>
     public partial class ContentListView : UserControl
     {
+        public ContentListViewModel ViewModel => (ContentListViewModel)DataContext;
+
         public ContentListView()
         {
             InitializeComponent();
-
-            DataContext = new ContentListModel();
         }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-
-using Asynts.Recall.Frontend.Models;
+using System.Windows.Navigation;
+using Asynts.Recall.Frontend.ViewModels;
 
 namespace Asynts.Recall.Frontend
 {
@@ -11,21 +12,18 @@ namespace Asynts.Recall.Frontend
     /// </summary>
     public partial class QueryBox : UserControl
     {
-        private readonly QueryBoxModel _queryBoxModel;
-
         public QueryBox()
         {
             InitializeComponent();
-
-            _queryBoxModel = new QueryBoxModel();
-            DataContext = _queryBoxModel;
         }
+
+        public QueryBoxViewModel ViewModel => (QueryBoxViewModel)DataContext;
 
         private void OnKeyDownHandler(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                _queryBoxModel.SubmitQueryCommand.Execute(null);
+                ViewModel.SubmitQuery();
             }
         }
     }

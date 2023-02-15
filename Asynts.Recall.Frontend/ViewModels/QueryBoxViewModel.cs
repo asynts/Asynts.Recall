@@ -7,10 +7,17 @@ using CommunityToolkit.Mvvm.Input;
 
 using Asynts.Recall.Backend.Persistance.Data;
 
-namespace Asynts.Recall.Frontend.Models;
+namespace Asynts.Recall.Frontend.ViewModels;
 
-internal partial class QueryBoxModel : ObservableObject
+public partial class QueryBoxViewModel : ObservableObject
 {
+    private readonly ContentListViewModel _contentListVM;
+
+    public QueryBoxViewModel(ContentListViewModel contentListVM)
+    {
+        _contentListVM = contentListVM;
+    }
+
     [ObservableProperty]
     private string query = string.Empty;
 
@@ -18,12 +25,10 @@ internal partial class QueryBoxModel : ObservableObject
     private string rawQuery = string.Empty;
 
     [RelayCommand]
-    private void SubmitQuery()
+    public void SubmitQuery()
     {
         var searchQueryData = ParseQuery();
-
-        // FIXME: Do something.
-        Debug.WriteLine("Updating query!");
+        _contentListVM.SetSearchQuery(searchQueryData);
     }
 
     private SearchQueryData ParseQuery()
