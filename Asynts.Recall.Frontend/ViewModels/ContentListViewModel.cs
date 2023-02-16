@@ -31,6 +31,7 @@ public partial class ContentListViewModel : ObservableObject
 
     private void _searchEngine_ResultAvaliableEvent(object sender, SearchEngineResultAvaliableEventArgs eventArgs)
     {
+        Debug.WriteLine($"[ContentListViewModel._searchEngine_ResultAvaliableEvent] Got new result from backend (Count={eventArgs.ContentList.Count})");
         ContentList = eventArgs.ContentList;
     }
 

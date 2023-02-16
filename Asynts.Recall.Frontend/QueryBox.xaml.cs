@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using Asynts.Recall.Frontend.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Asynts.Recall.Frontend
 {
@@ -18,8 +19,8 @@ namespace Asynts.Recall.Frontend
         {
             InitializeComponent();
 
-            // FIXME: Need access to dependency injection here.
-            DataContext = new QueryBoxViewModel();
+            DataContext = ActivatorUtilities.CreateInstance<QueryBoxViewModel>(App.Services);
+            Debug.Assert(DataContext != null);
         }
 
         private void OnKeyDownHandler(object sender, KeyEventArgs eventArgs)

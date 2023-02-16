@@ -1,6 +1,9 @@
 ﻿using System.Windows.Controls;
 
+using Microsoft.Extensions.DependencyInjection;
+
 using Asynts.Recall.Frontend.ViewModels;
+using System.Diagnostics;
 
 namespace Asynts.Recall.Frontend
 {
@@ -15,8 +18,8 @@ namespace Asynts.Recall.Frontend
         {
             InitializeComponent();
 
-            // FIXME: Need access to dependency injection here.
-            DataContext = new ContentListViewModel();
+            DataContext = ActivatorUtilities.CreateInstance<ContentListViewModel>(App.Services);
+            Debug.Assert(DataContext != null);
         }
     }
 }

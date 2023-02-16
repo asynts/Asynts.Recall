@@ -21,6 +21,12 @@
     services.AddSingleton<TaskScheduler>(TaskScheduler.FromCurrentSynchronizationContext());
 	```
 
+-	It is possible to create an service that isn't registered using:
+
+	```csharp
+	ActivatorUtilities.CreateInstance<UnregisteredClass>(serviceProvider);
+	```
+
 ### Tasks
 
 -	Read this article about how to access services from the viewmodel.

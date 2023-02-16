@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -27,6 +28,7 @@ public partial class QueryBoxViewModel : ObservableObject
     public void SubmitQuery()
     {
         var searchQueryData = ParseQuery();
+        Debug.WriteLine($"[QueryBoxViewModel.SubmitQuery] Sending updated query.");
         _searchEngine.UpdateSearchQueryAsync(searchQueryData);
     }
 

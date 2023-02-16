@@ -5,14 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Asynts.Recall.Frontend"
         xmlns:viewmodel="clr-namespace:Asynts.Recall.Frontend.ViewModels"
-        d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <StackPanel>
-        <local:QueryBox DataContext="{Binding QueryBoxVM}" />
+        <local:QueryBox />
 
         <Separator Background="Black" Margin="0" />
         
-        <local:ContentListView DataContext="{Binding ContentListVM}" />
+        <local:ContentListView />
     </StackPanel>
 </Window>

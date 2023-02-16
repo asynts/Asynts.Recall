@@ -1,10 +1,10 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
+using System;
+using System.Windows;
 
 using Microsoft.Extensions.DependencyInjection;
 
 using Asynts.Recall.Backend.Persistance;
-using Asynts.Recall.Frontend.ViewModels;
-using System.Threading.Tasks;
 
 namespace Asynts.Recall.Frontend
 {
@@ -13,6 +13,10 @@ namespace Asynts.Recall.Frontend
     /// </summary>
     public partial class App : Application
     {
+        private IServiceProvider? ServiceProvider { get; set; }
+
+        public static IServiceProvider Services => ((App)Current).ServiceProvider!;
+
         private void ConfigureServices(IServiceCollection services)
         {
             // We keep critical sections in the backend synchronized with the UI.
@@ -34,11 +38,9 @@ namespace Asynts.Recall.Frontend
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
 
-            var serviceProvider = serviceCollection.BuildServiceProvider();
+            ServiceProvider = serviceCollection.BuildServiceProvider();
 
-            var mainWindowVM = ActivatorUtilities.CreateInstance<MainWindowViewModel>(serviceProvider);
-
-            var mainWindow = new MainWindow(mainWindowVM);
+            var mainWindow = new MainWindow();
             mainWindow.Show();
         }
     }
