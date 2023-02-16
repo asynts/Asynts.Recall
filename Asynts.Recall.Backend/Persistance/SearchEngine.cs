@@ -55,7 +55,8 @@ public class SearchEngine : ISearchEngine
     {
         return _contentRepository.All()
             // Only include results that contain all the required tags.
-            .Where(content => query.RequiredTags.All(requiredTag => content.Tags.Contains(requiredTag)))
+            // We consider tags to be hierarchical and a matching prefix is sufficient. 
+            .Where(content => query.RequiredTags.All(requiredTag => content.Tags.Any(tag => tag.StartsWith(requiredTag))))
             // Sort based on how well it matches the query.
             .OrderByDescending(content => ScoreResult(query, content));
     }
