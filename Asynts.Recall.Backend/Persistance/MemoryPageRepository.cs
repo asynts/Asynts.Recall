@@ -4,31 +4,25 @@ using Asynts.Recall.Backend.Persistance.Data;
 
 namespace Asynts.Recall.Backend.Persistance;
 
-public class MemoryContentRepository : IContentRepository
+public class MemoryPageRepository : IPageRepository
 {
-    private List<ContentData> contentList = new List<ContentData>();
+    private List<PageData> pages = new List<PageData>();
 
-    public MemoryContentRepository()
+    public void Add(PageData page)
     {
-
+        pages.Add(page);
     }
 
-    public void Add(ContentData data)
+    public IEnumerable<PageData> All()
     {
-        contentList.Add(data);
+        return pages;
     }
 
-    public IEnumerable<ContentData> All()
-    {
-        return contentList;
-    }
-
-    // FIXME: Move this somewhere else.
     public void LoadExampleData()
     {
-        contentList.Clear();
+        pages.Clear();
 
-        Add(new ContentData
+        Add(new PageData
         {
             Id = 0,
             Title = "Hello, world!",
@@ -39,7 +33,7 @@ public class MemoryContentRepository : IContentRepository
                 "notes/example/",
             },
         });
-        Add(new ContentData
+        Add(new PageData
         {
             Id = 1,
             Title = "Another Example",

@@ -2,7 +2,7 @@
 
 namespace Asynts.Recall.Backend.Persistance.Data;
 
-public record ContentData
+public record PageData
 {
     public required int Id { get; set; }
     public required string Title { get; set; }

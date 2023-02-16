@@ -4,7 +4,7 @@ using Asynts.Recall.Backend.Persistance.Data;
 
 namespace Asynts.Recall.Backend.Persistance;
 
-public interface IContentRepository
+public interface IPageRepository
 {
-    IEnumerable<ContentData> All();
+    IEnumerable<PageData> All();
 }

@@ -10,12 +10,12 @@ namespace Asynts.Recall.Backend.Persistance;
 
 public class SearchEngine : ISearchEngine, IDisposable
 {
-    private readonly IContentRepository _contentRepository;
+    private readonly IPageRepository _pageRepository;
     private readonly Dispatcher _dispatcher;
 
-    public SearchEngine(IContentRepository contentRepository, Dispatcher dispatcher)
+    public SearchEngine(IPageRepository pageRepository, Dispatcher dispatcher)
     {
-        _contentRepository = contentRepository;
+        _pageRepository = pageRepository;
         _dispatcher = dispatcher;
     }
 
@@ -45,7 +45,7 @@ public class SearchEngine : ISearchEngine, IDisposable
                 try
                 {
                     // We allow the search to be cancelled in the middle.
-                    var contentList = Search(searchQuery)
+                    var pages = Search(searchQuery)
                         .AsParallel()
                         .WithCancellation(cancellationToken)
                         .ToList();
@@ -59,23 +59,23 @@ public class SearchEngine : ISearchEngine, IDisposable
                             return;
                         }
 
-                        ResultAvaliableEvent?.Invoke(this, new SearchEngineResultAvaliableEventArgs(contentList));
+                        ResultAvaliableEvent?.Invoke(this, new SearchEngineResultAvaliableEventArgs(pages));
                     });
                 } catch (OperationCanceledException) { }
             }, cancellationToken);
     }
 
-    public IEnumerable<ContentData> Search(SearchQueryData query)
+    public IEnumerable<PageData> Search(SearchQueryData query)
     {
-        return _contentRepository.All()
+        return _pageRepository.All()
             // Only include results that contain all the required tags.
             // We consider tags to be hierarchical and a matching prefix is sufficient. 
-            .Where(content => query.RequiredTags.All(requiredTag => content.Tags.Any(tag => tag.StartsWith(requiredTag))))
+            .Where(page => query.RequiredTags.All(requiredTag => page.Tags.Any(tag => tag.StartsWith(requiredTag))))
             // Sort based on how well it matches the query.
-            .OrderByDescending(content => ScoreResult(query, content));
+            .OrderByDescending(page => ScoreSearchResult(query, page));
     }
 
-    private float ScoreResult(SearchQueryData query, ContentData content)
+    private float ScoreSearchResult(SearchQueryData query, PageData content)
     {
         float score = 0;
 

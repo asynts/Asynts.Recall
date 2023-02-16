@@ -12,6 +12,6 @@
 
         <Separator Background="Black" Margin="0" />
         
-        <local:ContentListView />
+        <local:PageList />
     </StackPanel>
 </Window>

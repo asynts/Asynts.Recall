@@ -8,9 +8,9 @@ namespace Asynts.Recall.Backend.Persistance;
 
 public class SearchEngineResultAvaliableEventArgs : EventArgs
 {
-    public IList<ContentData> ContentList { get; private set; }
+    public IList<PageData> ContentList { get; private set; }
 
-    public SearchEngineResultAvaliableEventArgs(IList<ContentData> contentList)
+    public SearchEngineResultAvaliableEventArgs(IList<PageData> contentList)
     {
         ContentList = contentList;
     }
@@ -22,6 +22,6 @@ public interface ISearchEngine
 {
     public event SearchEngineResultAvaliableHandler? ResultAvaliableEvent;
 
-    IEnumerable<ContentData> Search(SearchQueryData query);
+    IEnumerable<PageData> Search(SearchQueryData query);
     Task UpdateSearchQueryAsync(SearchQueryData searchQuery);
 }

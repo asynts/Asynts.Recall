@@ -10,15 +10,15 @@ namespace Asynts.Recall.Frontend.Views
     /// <summary>
     /// Interaction logic for ContentListView.xaml
     /// </summary>
-    public partial class ContentListView : UserControl
+    public partial class PageList : UserControl
     {
-        public ContentListViewModel ViewModel => (ContentListViewModel)DataContext;
+        public PageListViewModel ViewModel => (PageListViewModel)DataContext;
 
-        public ContentListView()
+        public PageList()
         {
             InitializeComponent();
 
-            DataContext = App.Current.Services.GetRequiredService<ContentListViewModel>();
+            DataContext = App.Current.Services.GetRequiredService<PageListViewModel>();
         }
     }
 }

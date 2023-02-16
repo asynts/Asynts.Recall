@@ -9,12 +9,12 @@ using System.Diagnostics;
 
 namespace Asynts.Recall.Frontend.ViewModels;
 
-public partial class ContentListViewModel : ObservableObject
+public partial class PageListViewModel : ObservableObject
 {
-    readonly IContentRepository _memoryContentRepository;
+    readonly IPageRepository _memoryContentRepository;
     readonly ISearchEngine _searchEngine;
 
-    public ContentListViewModel(IContentRepository memoryContentRepository, ISearchEngine searchEngine)
+    public PageListViewModel(IPageRepository memoryContentRepository, ISearchEngine searchEngine)
     {
         _memoryContentRepository = memoryContentRepository;
         _searchEngine = searchEngine;
@@ -31,10 +31,9 @@ public partial class ContentListViewModel : ObservableObject
 
     private void _searchEngine_ResultAvaliableEvent(object sender, SearchEngineResultAvaliableEventArgs eventArgs)
     {
-        Debug.WriteLine($"[ContentListViewModel._searchEngine_ResultAvaliableEvent] Got new result from backend (Count={eventArgs.ContentList.Count})");
-        ContentList = eventArgs.ContentList;
+        PageList = eventArgs.ContentList;
     }
 
     [ObservableProperty]
-    private IList<ContentData> contentList = new List<ContentData>();
+    private IList<PageData> pageList = new List<PageData>();
 }
