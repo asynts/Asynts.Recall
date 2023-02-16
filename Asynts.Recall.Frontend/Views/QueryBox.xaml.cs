@@ -3,10 +3,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
-using Asynts.Recall.Frontend.ViewModels;
+
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Asynts.Recall.Frontend
+using Asynts.Recall.Frontend.ViewModels;
+
+namespace Asynts.Recall.Frontend.Views
 {
     /// <summary>
     /// Interaction logic for QueryBox.xaml
@@ -19,8 +21,7 @@ namespace Asynts.Recall.Frontend
         {
             InitializeComponent();
 
-            DataContext = ActivatorUtilities.CreateInstance<QueryBoxViewModel>(App.Services);
-            Debug.Assert(DataContext != null);
+            DataContext = App.Current.Services.GetRequiredService<QueryBoxViewModel>();
         }
 
         private void OnKeyDownHandler(object sender, KeyEventArgs eventArgs)

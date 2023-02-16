@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Asynts.Recall.Frontend;
+namespace Asynts.Recall.Frontend.Views;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml

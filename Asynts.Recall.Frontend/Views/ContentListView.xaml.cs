@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Asynts.Recall.Frontend.ViewModels;
 using System.Diagnostics;
 
-namespace Asynts.Recall.Frontend
+namespace Asynts.Recall.Frontend.Views
 {
     /// <summary>
     /// Interaction logic for ContentListView.xaml
@@ -18,8 +18,7 @@ namespace Asynts.Recall.Frontend
         {
             InitializeComponent();
 
-            DataContext = ActivatorUtilities.CreateInstance<ContentListViewModel>(App.Services);
-            Debug.Assert(DataContext != null);
+            DataContext = App.Current.Services.GetRequiredService<ContentListViewModel>();
         }
     }
 }
