@@ -11,12 +11,10 @@ namespace Asynts.Recall.Frontend.ViewModels;
 
 public partial class PageListViewModel : ObservableObject
 {
-    readonly IPageRepository _memoryContentRepository;
     readonly ISearchEngine _searchEngine;
 
-    public PageListViewModel(IPageRepository memoryContentRepository, ISearchEngine searchEngine)
+    public PageListViewModel(ISearchEngine searchEngine)
     {
-        _memoryContentRepository = memoryContentRepository;
         _searchEngine = searchEngine;
 
         _searchEngine.ResultAvaliableEvent += _searchEngine_ResultAvaliableEvent;

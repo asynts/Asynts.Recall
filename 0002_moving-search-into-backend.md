@@ -30,6 +30,18 @@
 -	It seems that the community toolkit helps with dependency injection:
 	https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/ioc
 
+-	I hand an idea to avoid using `Dispatcher` in the backend:
+
+	```csharp
+	_searchEngine_ResultAvaliableEvent += (sender, eventArgs) => dispatcher.Invoke(_searchEngine_ResultAvaliableEvent, sender, eventArgs);
+	```
+
+	However, I can't really combine this with the cancellation token.
+	The event should never be emitted if it was changed.
+
+-	Another idea I had was to simply ask the caller to be on the UI thread.
+	That's another can of worms and I am not going to implement that until I know better how this affects testing.
+
 ### Tasks
 
 -	Read this article about how to access services from the viewmodel.
