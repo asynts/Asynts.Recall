@@ -2,7 +2,7 @@
 
 namespace Asynts.Recall.Backend.Persistance;
 
-public class SearchEngine : ISearchEngine
+public class SearchEngine : ISearchEngine, IDisposable
 {
     private readonly IContentRepository _contentRepository;
     private readonly TaskScheduler _criticalTaskScheduler;
@@ -13,21 +13,24 @@ public class SearchEngine : ISearchEngine
         _criticalTaskScheduler = criticalTaskScheduler;
     }
 
+    public void Dispose()
+    {
+        SearchQueryCancellationSource?.Dispose();
+    }
+
     public event SearchEngineResultAvaliableHandler? ResultAvaliableEvent;
 
-    // FIXME: Dispose?
-    private CancellationTokenSource? _searchQueryCancellationToken = null;
-
+    private CancellationTokenSource? SearchQueryCancellationSource = null;
     public Task UpdateSearchQueryAsync(SearchQueryData searchQuery)
     {
-        if (_searchQueryCancellationToken != null)
+        if (SearchQueryCancellationSource != null)
         {
-            _searchQueryCancellationToken.Cancel();
-            _searchQueryCancellationToken.Dispose();
+            SearchQueryCancellationSource.Cancel();
+            SearchQueryCancellationSource.Dispose();
         }
 
-        _searchQueryCancellationToken = new CancellationTokenSource();
-        var cancellationToken = _searchQueryCancellationToken.Token;
+        SearchQueryCancellationSource = new CancellationTokenSource();
+        var cancellationToken = SearchQueryCancellationSource.Token;
 
         return Task
             // We allow the search to be cancelled, if the thread pool hasn't started processing it yet.
@@ -75,14 +78,15 @@ public class SearchEngine : ISearchEngine
             {
                 score += 1;
             }
-            if (content.Title.Contains(query.RawTextQuery, StringComparison.Ordinal))
-            {
-                score += 20;
-            }
-            if (content.Contents.Contains(query.RawTextQuery, StringComparison.Ordinal))
-            {
-                score += 10;
-            }
+        }
+
+        if (content.Title.Contains(query.RawTextQuery, StringComparison.InvariantCulture))
+        {
+            score += 20;
+        }
+        if (content.Contents.Contains(query.RawTextQuery, StringComparison.InvariantCulture))
+        {
+            score += 10;
         }
 
         return score;
