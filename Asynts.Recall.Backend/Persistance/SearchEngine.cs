@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
+using System.Windows.Threading;
 using Asynts.Recall.Backend.Persistance.Data;
 
 namespace Asynts.Recall.Backend.Persistance;
@@ -11,12 +11,12 @@ namespace Asynts.Recall.Backend.Persistance;
 public class SearchEngine : ISearchEngine, IDisposable
 {
     private readonly IContentRepository _contentRepository;
-    private readonly TaskScheduler _criticalTaskScheduler;
+    private readonly Dispatcher _dispatcher;
 
-    public SearchEngine(IContentRepository contentRepository, TaskScheduler criticalTaskScheduler)
+    public SearchEngine(IContentRepository contentRepository, Dispatcher dispatcher)
     {
         _contentRepository = contentRepository;
-        _criticalTaskScheduler = criticalTaskScheduler;
+        _dispatcher = dispatcher;
     }
 
     public void Dispose()
@@ -42,22 +42,27 @@ public class SearchEngine : ISearchEngine, IDisposable
             // We allow the search to be cancelled, if the thread pool hasn't started processing it yet.
             .Run(() =>
             {
-                // We allow the search to be cancelled in the middle.
-                return Search(searchQuery)
-                    .AsParallel()
-                    .WithCancellation(cancellationToken)
-                    .ToList();
-            }, cancellationToken)
-            // We allow the search to be cancelled after the results are ready.
-            .ContinueWith(contentListTask =>
-            {
-                if (cancellationToken.IsCancellationRequested)
+                try
                 {
-                    return;
-                }
+                    // We allow the search to be cancelled in the middle.
+                    var contentList = Search(searchQuery)
+                        .AsParallel()
+                        .WithCancellation(cancellationToken)
+                        .ToList();
 
-                ResultAvaliableEvent?.Invoke(this, new SearchEngineResultAvaliableEventArgs(contentListTask.Result));
-            }, _criticalTaskScheduler);
+                    // To avoid race conditions, we dispatch to an event queue before checking for cancellation.
+                    _dispatcher.BeginInvoke(() =>
+                    {
+                        // We allow cancellation even if the result is already ready.
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            return;
+                        }
+
+                        ResultAvaliableEvent?.Invoke(this, new SearchEngineResultAvaliableEventArgs(contentList));
+                    });
+                } catch (OperationCanceledException) { }
+            }, cancellationToken);
     }
 
     public IEnumerable<ContentData> Search(SearchQueryData query)

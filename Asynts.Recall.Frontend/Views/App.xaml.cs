@@ -28,14 +28,8 @@ namespace Asynts.Recall.Frontend.Views
         {
             var services = new ServiceCollection();
 
-            // We keep critical sections in the backend synchronized with the UI.
-            // To achieve this, expose the `TaskScheduler` used by WPF (which is non-concurrent.)
-            services.AddSingleton<TaskScheduler>(services =>
-            {
-                // Unfortunately, there is no API that allows us to create a 'TaskScheduler' from a 'Dispatcher' directly.
-                // Instead, we run 'FromCurrentSynchronizationContext' in the dispatcher.
-                return Dispatcher.Invoke(() => TaskScheduler.FromCurrentSynchronizationContext());
-            });
+            // Allow the backend to dispatch to the event loop.
+            services.AddSingleton<Dispatcher>(Dispatcher);
 
             services.AddSingleton<IContentRepository>(services =>
             {
