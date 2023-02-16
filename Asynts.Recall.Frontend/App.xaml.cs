@@ -21,12 +21,7 @@ namespace Asynts.Recall.Frontend
                 return contentRepository;
             });
 
-
             services.AddSingleton<ISearchEngine, SearchEngine>();
-
-            services.AddTransient<ContentListViewModel>();
-            services.AddTransient<MainWindowViewModel>();
-            services.AddTransient<QueryBoxViewModel>();
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)
@@ -36,7 +31,7 @@ namespace Asynts.Recall.Frontend
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var mainWindowVM = serviceProvider.GetRequiredService<MainWindowViewModel>();
+            var mainWindowVM = ActivatorUtilities.CreateInstance<MainWindowViewModel>(serviceProvider);
 
             var mainWindow = new MainWindow(mainWindowVM);
             mainWindow.Show();

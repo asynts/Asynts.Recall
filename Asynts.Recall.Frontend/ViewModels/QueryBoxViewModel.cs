@@ -29,6 +29,7 @@ public partial class QueryBoxViewModel : ObservableObject
     {
         var searchQueryData = ParseQuery();
         _contentListVM.SetSearchQuery(searchQueryData);
+        Debug.WriteLine($"[QueryBoxViewModel.SubmitQuery], this={this}");
     }
 
     private SearchQueryData ParseQuery()
@@ -36,7 +37,10 @@ public partial class QueryBoxViewModel : ObservableObject
         var interestingTerms = new List<string>();
         var requiredTags = new List<string>();
 
+        Debug.WriteLine($"[QueryBoxViewModel.ParseQuery] query={Query}");
         var queryParts = Query.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        Debug.WriteLine($"[QueryBoxViewModel.ParseQuery] queryParts={string.Join(",", queryParts)}");
+
         foreach (var queryPart in queryParts)
         {
             if (queryPart.StartsWith('[') && queryPart.EndsWith(']')) {

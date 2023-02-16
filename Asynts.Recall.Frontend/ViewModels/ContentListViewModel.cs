@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 using Asynts.Recall.Backend.Persistance;
 using Asynts.Recall.Backend.Persistance.Data;
+using System.Diagnostics;
 
 namespace Asynts.Recall.Frontend.ViewModels;
 
@@ -29,6 +30,9 @@ public partial class ContentListViewModel : ObservableObject
     public void SetSearchQuery(SearchQueryData searchQueryData)
     {
         ContentList = _searchEngine.Search(searchQueryData).ToList();
+
+        Debug.WriteLine($"[ContentListViewModel.SetSearchQuery] count={ContentList.Count} this={this}");
+        Debug.WriteLine($"[ContentListViewModel.SetSearchQuery] requiredTags={string.Join(",", searchQueryData.RequiredTags)}");
     }
 
     [ObservableProperty]

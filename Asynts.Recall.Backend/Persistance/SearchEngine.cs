@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Asynts.Recall.Backend.Persistance.Data;
+﻿using Asynts.Recall.Backend.Persistance.Data;
 
 namespace Asynts.Recall.Backend.Persistance;
 
@@ -15,7 +13,37 @@ public class SearchEngine : ISearchEngine
 
     public IEnumerable<ContentData> Search(SearchQueryData query)
     {
-        // FIXME: Actually implement search instead of mocking it.
-        return _contentRepository.All();
+        return _contentRepository.All()
+            // Only include results that contain all the required tags.
+            .Where(content => query.RequiredTags.All(requiredTag => content.Tags.Contains(requiredTag)))
+            // Sort based on how well it matches the query.
+            .OrderByDescending(content => ScoreResult(query, content));
+    }
+
+    private float ScoreResult(SearchQueryData query, ContentData content)
+    {
+        float score = 0;
+
+        foreach (var interestingTerm in query.InterestingTerms)
+        {
+            if (content.Title.Contains(interestingTerm, StringComparison.InvariantCultureIgnoreCase))
+            {
+                score += 2;
+            }
+            if (content.Contents.Contains(interestingTerm, StringComparison.InvariantCultureIgnoreCase))
+            {
+                score += 1;
+            }
+            if (content.Title.Contains(query.RawTextQuery, StringComparison.Ordinal))
+            {
+                score += 20;
+            }
+            if (content.Contents.Contains(query.RawTextQuery, StringComparison.Ordinal))
+            {
+                score += 10;
+            }
+        }
+
+        return score;
     }
 }

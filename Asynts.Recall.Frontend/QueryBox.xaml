@@ -15,13 +15,13 @@
             <TextBlock Margin="5px,2px" Text="Query... ([tag]; each word individually; case-insensitive)"
                            Visibility="{Binding ElementName=refQuery, Path=Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
                            Foreground="Gray" />
-            <TextBox Name="refQuery" Text="{Binding Query}" Padding="2px" Background="Transparent" KeyDown="OnKeyDownHandler" />
+            <TextBox Name="refQuery" Text="{Binding Path=Query, Mode=TwoWay}" Padding="2px" Background="Transparent" KeyDown="OnKeyDownHandler" />
         </Grid>
         <Grid Margin="4px">
             <TextBlock Margin="5px,2px" Text="Raw Query... (whitespace included; case-sensitive)"
                            Visibility="{Binding ElementName=refRawQuery, Path=Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
                            Foreground="Gray" />
-            <TextBox Name="refRawQuery" Text="{Binding RawQuery}" Padding="2px" Background="Transparent" KeyDown="OnKeyDownHandler" />
+            <TextBox Name="refRawQuery" Text="{Binding Path=RawQuery, Mode=TwoWay}" Padding="2px" Background="Transparent" KeyDown="OnKeyDownHandler" />
         </Grid>
     </StackPanel>
 </UserControl>

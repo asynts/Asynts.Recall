@@ -1,14 +1,17 @@
 ﻿using Asynts.Recall.Backend.Persistance;
 using CommunityToolkit.Mvvm.ComponentModel;
+using System.Diagnostics;
 
 namespace Asynts.Recall.Frontend.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
-    public MainWindowViewModel(ContentListViewModel contentListVM, QueryBoxViewModel queryBoxVM)
+    public MainWindowViewModel(IContentRepository contentRepository, ISearchEngine searchEngine)
     {
-        this.queryBoxVM = queryBoxVM;
-        this.contentListVM = contentListVM;
+        this.contentListVM = new ContentListViewModel(contentRepository, searchEngine);
+        this.queryBoxVM = new QueryBoxViewModel(contentListVM);
+
+        Debug.WriteLine($"[MainWindowViewModel.MainWindowViewModel], contentListVM={this.contentListVM}, queryBoxVM={queryBoxVM}");
     }
 
     [ObservableProperty]
