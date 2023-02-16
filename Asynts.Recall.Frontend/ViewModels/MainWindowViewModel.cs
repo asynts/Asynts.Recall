@@ -1,17 +1,20 @@
-﻿using Asynts.Recall.Backend.Persistance;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
 using System.Diagnostics;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using CommunityToolkit.Mvvm.ComponentModel;
+
+using Asynts.Recall.Backend.Persistance;
 
 namespace Asynts.Recall.Frontend.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
-    public MainWindowViewModel(IContentRepository contentRepository, ISearchEngine searchEngine)
+    public MainWindowViewModel(IServiceProvider serviceProvider, IContentRepository contentRepository, ISearchEngine searchEngine)
     {
-        this.contentListVM = new ContentListViewModel(contentRepository, searchEngine);
-        this.queryBoxVM = new QueryBoxViewModel(contentListVM);
-
-        Debug.WriteLine($"[MainWindowViewModel.MainWindowViewModel], contentListVM={this.contentListVM}, queryBoxVM={queryBoxVM}");
+        this.contentListVM = ActivatorUtilities.CreateInstance<ContentListViewModel>(serviceProvider);
+        this.queryBoxVM = ActivatorUtilities.CreateInstance<QueryBoxViewModel>(serviceProvider, contentListVM);
     }
 
     [ObservableProperty]
