@@ -12,31 +12,7 @@
     <ItemsControl ItemsSource="{Binding PageList}" Padding="2px">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <Grid Background="Blue" Margin="2px">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-
-                    <Label Content="{Binding Path=Title}" Grid.Row="0" Grid.Column="0" FontSize="16pt" />
-                    <ItemsControl ItemsSource="{Binding Path=Tags}" Grid.Row="1" Grid.Column="0" Margin="2px">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Label Content="{Binding Path=.}" Padding="4px" Background="Red" Margin="2px" />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>    
-                    </ItemsControl>
-                    <Label Content="{Binding Path=Contents}" Grid.Row="2" Grid.Column="0" Background="Green" />
-                </Grid>
+                <local:Page DataContext="{Binding .}" Margin="2px" />
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>

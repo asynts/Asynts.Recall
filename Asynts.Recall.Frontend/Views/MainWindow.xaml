@@ -8,6 +8,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <StackPanel>
+        <!--<local:Page />-->
         <local:QueryBox />
 
         <Separator Background="Black" Margin="0" />
