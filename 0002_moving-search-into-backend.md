@@ -27,6 +27,9 @@
 	ActivatorUtilities.CreateInstance<UnregisteredClass>(serviceProvider);
 	```
 
+-	It seems that the community toolkit helps with dependency injection:
+	https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/ioc
+
 ### Tasks
 
 -	Read this article about how to access services from the viewmodel.
