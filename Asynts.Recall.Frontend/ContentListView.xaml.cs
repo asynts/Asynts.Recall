@@ -14,6 +14,9 @@ namespace Asynts.Recall.Frontend
         public ContentListView()
         {
             InitializeComponent();
+
+            // FIXME: Need access to dependency injection here.
+            DataContext = new ContentListViewModel();
         }
     }
 }

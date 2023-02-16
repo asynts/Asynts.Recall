@@ -23,7 +23,14 @@
 
 ### Tasks
 
+-	Read this article about how to access services from the viewmodel.
+	https://docs.devexpress.com/WPF/17450/mvvm-framework/services/services-in-custom-viewmodels
+
 -	Get rid of dependency injection by moving `SetSearchQuery` into the backend.
+
+-	Research, how to get global information into view model.
+
+-	Try using `Application.Current.ServiceProvider`.
 
 ### Theories
 

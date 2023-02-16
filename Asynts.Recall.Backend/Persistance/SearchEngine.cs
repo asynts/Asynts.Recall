@@ -2,18 +2,6 @@
 
 namespace Asynts.Recall.Backend.Persistance;
 
-public class ResultAvaliableEventArgs : EventArgs
-{
-    public IList<ContentData> ContentList { get; private set; }
-
-    public ResultAvaliableEventArgs(IList<ContentData> contentList)
-    {
-        ContentList = contentList;
-    }
-};
-
-public delegate void ResultAvaliableHandler(object sender, ResultAvaliableEventArgs eventArgs);
-
 public class SearchEngine : ISearchEngine
 {
     private readonly IContentRepository _contentRepository;
@@ -25,7 +13,7 @@ public class SearchEngine : ISearchEngine
         _criticalTaskScheduler = criticalTaskScheduler;
     }
 
-    public event ResultAvaliableHandler? ResultAvaliableEvent;
+    public event SearchEngineResultAvaliableHandler? ResultAvaliableEvent;
 
     // FIXME: Dispose?
     private CancellationTokenSource? _searchQueryCancellationToken = null;
@@ -59,7 +47,7 @@ public class SearchEngine : ISearchEngine
                     return;
                 }
 
-                ResultAvaliableEvent?.Invoke(this, new ResultAvaliableEventArgs(contentListTask.Result));
+                ResultAvaliableEvent?.Invoke(this, new SearchEngineResultAvaliableEventArgs(contentListTask.Result));
             }, _criticalTaskScheduler);
     }
 

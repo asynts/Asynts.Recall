@@ -12,12 +12,15 @@ namespace Asynts.Recall.Frontend
     /// </summary>
     public partial class QueryBox : UserControl
     {
+        public QueryBoxViewModel ViewModel => (QueryBoxViewModel)DataContext;
+
         public QueryBox()
         {
             InitializeComponent();
-        }
 
-        public QueryBoxViewModel ViewModel => (QueryBoxViewModel)DataContext;
+            // FIXME: Need access to dependency injection here.
+            DataContext = new QueryBoxViewModel();
+        }
 
         private void OnKeyDownHandler(object sender, KeyEventArgs eventArgs)
         {

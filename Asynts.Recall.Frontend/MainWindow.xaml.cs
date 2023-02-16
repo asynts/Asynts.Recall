@@ -1,7 +1,5 @@
 ﻿using System.Windows;
 
-using Asynts.Recall.Frontend.ViewModels;
-
 namespace Asynts.Recall.Frontend;
 
 /// <summary>
@@ -9,14 +7,8 @@ namespace Asynts.Recall.Frontend;
 /// </summary>
 public partial class MainWindow : Window
 {
-    public MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext;
-
-    // For design only.
-    public MainWindow() { }
-
-    public MainWindow(MainWindowViewModel mainWindowViewModel)
+    public MainWindow()
     {
         InitializeComponent();
-        DataContext = mainWindowViewModel;
     }
 }

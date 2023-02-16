@@ -19,7 +19,9 @@ public partial class ContentListViewModel : ObservableObject
         _memoryContentRepository = memoryContentRepository;
         _searchEngine = searchEngine;
 
-        SetSearchQuery(new SearchQueryData
+        _searchEngine.ResultAvaliableEvent += _searchEngine_ResultAvaliableEvent;
+
+        _searchEngine.UpdateSearchQueryAsync(new SearchQueryData
         {
             RequiredTags = new List<string>(),
             InterestingTerms = new List<string>(),
@@ -27,12 +29,9 @@ public partial class ContentListViewModel : ObservableObject
         });
     }
 
-    public void SetSearchQuery(SearchQueryData searchQueryData)
+    private void _searchEngine_ResultAvaliableEvent(object sender, SearchEngineResultAvaliableEventArgs eventArgs)
     {
-        ContentList = _searchEngine.Search(searchQueryData).ToList();
-
-        Debug.WriteLine($"[ContentListViewModel.SetSearchQuery] count={ContentList.Count} this={this}");
-        Debug.WriteLine($"[ContentListViewModel.SetSearchQuery] requiredTags={string.Join(",", searchQueryData.RequiredTags)}");
+        ContentList = eventArgs.ContentList;
     }
 
     [ObservableProperty]
