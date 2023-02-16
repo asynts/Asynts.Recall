@@ -1,9 +1,10 @@
-﻿using System;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
+
+using Microsoft.Extensions.DependencyInjection;
+
 using Asynts.Recall.Backend.Persistance;
 using Asynts.Recall.Frontend.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace Asynts.Recall.Frontend
 {
@@ -14,6 +15,10 @@ namespace Asynts.Recall.Frontend
     {
         private void ConfigureServices(IServiceCollection services)
         {
+            // We keep critical sections in the backend synchronized with the UI.
+            // To achieve this, expose the `TaskScheduler` used by WPF (which is non-concurrent.)
+            services.AddSingleton<TaskScheduler>(TaskScheduler.FromCurrentSynchronizationContext());
+
             services.AddSingleton<IContentRepository>(services =>
             {
                 var contentRepository = new MemoryContentRepository();

@@ -17,10 +17,12 @@ public delegate void ResultAvaliableHandler(object sender, ResultAvaliableEventA
 public class SearchEngine : ISearchEngine
 {
     private readonly IContentRepository _contentRepository;
+    private readonly TaskScheduler _criticalTaskScheduler;
 
-    public SearchEngine(IContentRepository contentRepository)
+    public SearchEngine(IContentRepository contentRepository, TaskScheduler criticalTaskScheduler)
     {
         _contentRepository = contentRepository;
+        _criticalTaskScheduler = criticalTaskScheduler;
     }
 
     public event ResultAvaliableHandler? ResultAvaliableEvent;
@@ -28,8 +30,6 @@ public class SearchEngine : ISearchEngine
     // FIXME: Dispose?
     private CancellationTokenSource? _searchQueryCancellationToken = null;
 
-    // FIXME: This function assumes that it runs in the UI thread.
-    //        Instead we should take a synchronization context in the constructor and use that for the continuation.
     public Task UpdateSearchQueryAsync(SearchQueryData searchQuery)
     {
         if (_searchQueryCancellationToken != null)
@@ -52,15 +52,15 @@ public class SearchEngine : ISearchEngine
                     .ToList();
             }, cancellationToken)
             // We allow the search to be cancelled after the results are ready.
-            .ContinueWith(contentList =>
+            .ContinueWith(contentListTask =>
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
                     return;
                 }
 
-                ResultAvaliableEvent?.Invoke(this, new ResultAvaliableEventArgs(contentList.Result));
-            }, TaskScheduler.FromCurrentSynchronizationContext());
+                ResultAvaliableEvent?.Invoke(this, new ResultAvaliableEventArgs(contentListTask.Result));
+            }, _criticalTaskScheduler);
     }
 
     public IEnumerable<ContentData> Search(SearchQueryData query)
