@@ -23,11 +23,5 @@ namespace Asynts.Recall.Frontend.ViewModels
 
         [ObservableProperty]
         private IList<string> tags = new List<string> { "tag_1", "tag_2", "tag_3" };
-
-        [RelayCommand]
-        void Print()
-        {
-            Debug.WriteLine($"[PageViewModel.Print] id={Id}");
-        }
     }
 }

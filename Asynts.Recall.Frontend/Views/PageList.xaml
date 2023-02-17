@@ -13,7 +13,7 @@
     <ItemsControl ItemsSource="{Binding Path=Pages}" Padding="2px">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <local:Page DataContext="{Binding Path=., diag:PresentationTraceSources.TraceLevel=High}" Margin="2px" />
+                <local:Page DataContext="{Binding}" Margin="2px" />
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>
