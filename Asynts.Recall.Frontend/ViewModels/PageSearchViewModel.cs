@@ -11,14 +11,14 @@ using Asynts.Recall.Backend.Services;
 
 namespace Asynts.Recall.Frontend.ViewModels;
 
-public partial class PageListViewModel : ObservableObject
+public partial class PageSearchViewModel : ObservableObject
 {
     public long DebugId { get; private set; }
 
     private readonly IServiceProvider _serviceProvider;
     readonly ISearchService _searchService;
 
-    public PageListViewModel(IServiceProvider serviceProvider, ISearchService searchService, ObjectIDGenerator idGenerator)
+    public PageSearchViewModel(IServiceProvider serviceProvider, ISearchService searchService, ObjectIDGenerator idGenerator)
     {
         DebugId = idGenerator.GetId(this, out _);
 

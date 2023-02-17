@@ -18,7 +18,7 @@ public partial class MainWindowViewModel : ObservableObject
         _routingService = routingService;
         _serviceProvider = serviceProvider;
 
-        currentViewModel = _serviceProvider.GetRequiredService<PageListViewModel>();
+        currentViewModel = _serviceProvider.GetRequiredService<PageSearchViewModel>();
         _routingService.RouteChangedEvent += _routingService_RouteChangedEvent;
 
         _routingService.Navigate(new PageSearchRouteData
@@ -35,7 +35,7 @@ public partial class MainWindowViewModel : ObservableObject
 
         if (eventArgs.Route is PageSearchRouteData)
         {
-            CurrentViewModel = _serviceProvider.GetRequiredService<PageListViewModel>();
+            CurrentViewModel = _serviceProvider.GetRequiredService<PageSearchViewModel>();
         }
         else if (eventArgs.Route is PageDetailsRouteData)
         {

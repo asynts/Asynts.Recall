@@ -9,8 +9,8 @@
         Title="MainWindow" Height="450" Width="800"
         d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}">
     <Window.Resources>
-        <DataTemplate DataType="{x:Type viewmodel:PageListViewModel}">
-            <local:PageList DataContext="{Binding}" />
+        <DataTemplate DataType="{x:Type viewmodel:PageSearchViewModel}">
+            <local:PageSearch DataContext="{Binding}" />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewmodel:PageViewModel}">
             <local:Page DataContext="{Binding}" Padding="4px" />
