@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using Asynts.Recall.Backend.Persistance.Data;
 
-namespace Asynts.Recall.Backend.Persistance;
+namespace Asynts.Recall.Backend.Services;
 
 public class SearchEngineResultAvaliableEventArgs : EventArgs
 {
@@ -18,7 +18,7 @@ public class SearchEngineResultAvaliableEventArgs : EventArgs
 
 public delegate void SearchEngineResultAvaliableHandler(object sender, SearchEngineResultAvaliableEventArgs eventArgs);
 
-public interface ISearchEngine
+public interface ISearchService
 {
     public event SearchEngineResultAvaliableHandler? ResultAvaliableEvent;
 

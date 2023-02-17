@@ -4,16 +4,17 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using Asynts.Recall.Backend.Persistance;
 using Asynts.Recall.Backend.Persistance.Data;
 
-namespace Asynts.Recall.Backend.Persistance;
+namespace Asynts.Recall.Backend.Services;
 
-public class SearchEngine : ISearchEngine, IDisposable
+public class SearchService : ISearchService, IDisposable
 {
     private readonly IPageRepository _pageRepository;
     private readonly Dispatcher _dispatcher;
 
-    public SearchEngine(IPageRepository pageRepository, Dispatcher dispatcher)
+    public SearchService(IPageRepository pageRepository, Dispatcher dispatcher)
     {
         _pageRepository = pageRepository;
         _dispatcher = dispatcher;
@@ -61,7 +62,8 @@ public class SearchEngine : ISearchEngine, IDisposable
 
                         ResultAvaliableEvent?.Invoke(this, new SearchEngineResultAvaliableEventArgs(pages));
                     });
-                } catch (OperationCanceledException) { }
+                }
+                catch (OperationCanceledException) { }
             }, cancellationToken);
     }
 

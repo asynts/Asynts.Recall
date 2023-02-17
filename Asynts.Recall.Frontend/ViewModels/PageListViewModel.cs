@@ -4,12 +4,11 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 using CommunityToolkit.Mvvm.ComponentModel;
-
-using Asynts.Recall.Backend.Persistance;
 using Asynts.Recall.Backend.Persistance.Data;
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.Serialization;
+using Asynts.Recall.Backend.Services;
 
 namespace Asynts.Recall.Frontend.ViewModels;
 
@@ -18,18 +17,18 @@ public partial class PageListViewModel : ObservableObject
     public long Id { get; private set; }
 
     private readonly IServiceProvider _serviceProvider;
-    readonly ISearchEngine _searchEngine;
+    readonly ISearchService _searchService;
 
-    public PageListViewModel(IServiceProvider serviceProvider, ISearchEngine searchEngine, ObjectIDGenerator idGenerator)
+    public PageListViewModel(IServiceProvider serviceProvider, ISearchService searchService, ObjectIDGenerator idGenerator)
     {
         Id = idGenerator.GetId(this, out _);
 
         _serviceProvider = serviceProvider;
-        _searchEngine = searchEngine;
+        _searchService = searchService;
 
-        _searchEngine.ResultAvaliableEvent += _searchEngine_ResultAvaliableEvent;
+        _searchService.ResultAvaliableEvent += _searchEngine_ResultAvaliableEvent;
 
-        _searchEngine.UpdateSearchQueryAsync(new SearchQueryData
+        _searchService.UpdateSearchQueryAsync(new SearchQueryData
         {
             RequiredTags = new List<string>(),
             InterestingTerms = new List<string>(),

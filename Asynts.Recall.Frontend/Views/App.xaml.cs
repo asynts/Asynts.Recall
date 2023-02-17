@@ -8,6 +8,7 @@ using Asynts.Recall.Backend.Persistance;
 using Asynts.Recall.Frontend.ViewModels;
 using System.Windows.Threading;
 using System.Runtime.Serialization;
+using Asynts.Recall.Backend.Services;
 
 namespace Asynts.Recall.Frontend.Views
 {
@@ -39,7 +40,7 @@ namespace Asynts.Recall.Frontend.Views
                 return contentRepository;
             });
 
-            services.AddSingleton<ISearchEngine, SearchEngine>();
+            services.AddSingleton<ISearchService, SearchService>();
 
             services.AddSingleton<ObjectIDGenerator>();
 

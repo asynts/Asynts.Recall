@@ -6,16 +6,16 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using Asynts.Recall.Backend.Persistance.Data;
-using Asynts.Recall.Backend.Persistance;
+using Asynts.Recall.Backend.Services;
 
 namespace Asynts.Recall.Frontend.ViewModels;
 
 public partial class QueryBoxViewModel : ObservableObject
 {
-    readonly ISearchEngine _searchEngine;
-    public QueryBoxViewModel(ISearchEngine searchEngine)
+    readonly ISearchService _searchService;
+    public QueryBoxViewModel(ISearchService searchService)
     {
-        _searchEngine = searchEngine;
+        _searchService = searchService;
     }
 
     [ObservableProperty]
@@ -28,7 +28,7 @@ public partial class QueryBoxViewModel : ObservableObject
     public void SubmitQuery()
     {
         var searchQueryData = ParseQuery();
-        _searchEngine.UpdateSearchQueryAsync(searchQueryData);
+        _searchService.UpdateSearchQueryAsync(searchQueryData);
     }
 
     private SearchQueryData ParseQuery()
