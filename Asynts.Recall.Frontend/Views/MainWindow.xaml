@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Asynts.Recall.Frontend.Views"
         xmlns:viewmodel="clr-namespace:Asynts.Recall.Frontend.ViewModels"
+        xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}">
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewmodel:PageSearchViewModel}">
-            <local:PageSearch DataContext="{Binding}" />
+            <local:PageSearch DataContext="{Binding}" ShowPageDetailsCommand="{Binding ElementName=refQueryBox, Path=DataContext.ShowPageDetailsCommand, diag:PresentationTraceSources.TraceLevel=High}" />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewmodel:PageViewModel}">
             <local:Page DataContext="{Binding}" Padding="4px" />
@@ -18,7 +19,7 @@
     </Window.Resources>
     
     <StackPanel>
-        <local:QueryBox />
+        <local:QueryBox x:Name="refQueryBox" />
 
         <Separator Background="Black" Margin="0" />
 

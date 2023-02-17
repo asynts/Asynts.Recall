@@ -32,6 +32,13 @@ public partial class QueryBoxViewModel : ObservableObject
         _routingService.Navigate(route);
     }
 
+    [RelayCommand]
+    public void ShowPageDetails(long pageId)
+    {
+        Query = $"#{pageId} ";
+        SubmitQuery();
+    }
+
     private RouteData ParseQuery()
     {
         var interestingTerms = new List<string>();
@@ -40,9 +47,18 @@ public partial class QueryBoxViewModel : ObservableObject
         var queryParts = Query.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         foreach (var queryPart in queryParts)
         {
-            if (queryPart.StartsWith('[') && queryPart.EndsWith(']')) {
+            if (queryPart.StartsWith("#"))
+            {
+                long postId;
+                if (long.TryParse(queryPart.Substring(1), out postId))
+                {
+                    return new PageDetailsRouteData { PageId = postId };
+                }
+            }
+            else if (queryPart.StartsWith('[') && queryPart.EndsWith(']')) {
                 requiredTags.Add(queryPart.Substring(1, queryPart.Length - 2));
-            } else
+            }
+            else
             {
                 interestingTerms.Add(queryPart);
             }
