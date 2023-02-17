@@ -12,6 +12,6 @@
 
         <Separator Background="Black" Margin="0" />
 
-        <Frame Source="PageList.xaml" />
+        <Frame Source="PageList.xaml" NavigationUIVisibility="Hidden" />
     </StackPanel>
 </Window>

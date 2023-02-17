@@ -7,6 +7,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using Asynts.Recall.Frontend.Views;
+using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Asynts.Recall.Frontend.ViewModels
 {
@@ -31,7 +33,9 @@ namespace Asynts.Recall.Frontend.ViewModels
         [RelayCommand]
         public void NavigateDetailsPage(NavigationService navigationService)
         {
-            navigationService.Navigate(new PageDetails());
+            var pageDetailsView = new PageDetails();
+            pageDetailsView.DataContext = this;
+            navigationService.Navigate(pageDetailsView);
         }
     }
 }
