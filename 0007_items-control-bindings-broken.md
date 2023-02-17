@@ -82,8 +82,26 @@
 -   I downgraded the toolkit from 8.1.0 to 8.0.0.
     The errors disappeared but this may just be a coincidence.
 
+-   I removed the assignment in the constructor and this resolved the issue.
+    However, now I don't understand what is going on.
+    I tried this before and it did not work.
+
+-   Even if I move the assignment above the call to `InitializeComponent()`, it still uses the default instead.
+
+-   I verified again and `DataContext` is `null` when we assign to it in the constructor.
+
+### Tasks
+
+-   Verify again, if we are overriding something in the construtor.
+
+-   If I inline the code from `Page.xaml`, does this solve the issue?
+
 ### Theories
 
--   I suspect that when the actual value becomes avaliable, we do not update the UI somehow.
+-   I suspect, that assigning to the `DataContext` in XAML isn't possible if it's already set in the constructor.
 
--   I think the problem is that it has the type `PageData` and not `PageViewModel`.
+    -   What speaks against this is that the assignment happens later.
+
+    -   However, it could be that it doesn't want to override it unless it's already null.
+
+-   I suspect, that when XAML sets the `DataContext` it doesn't notify the UI correctly and thus it keeps rendering the old version.
