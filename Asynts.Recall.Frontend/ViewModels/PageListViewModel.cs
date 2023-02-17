@@ -7,15 +7,19 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 using Asynts.Recall.Backend.Persistance;
 using Asynts.Recall.Backend.Persistance.Data;
+using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Asynts.Recall.Frontend.ViewModels;
 
 public partial class PageListViewModel : ObservableObject
 {
+    private readonly IServiceProvider _serviceProvider;
     readonly ISearchEngine _searchEngine;
 
-    public PageListViewModel(ISearchEngine searchEngine)
+    public PageListViewModel(IServiceProvider serviceProvider, ISearchEngine searchEngine)
     {
+        _serviceProvider = serviceProvider;
         _searchEngine = searchEngine;
 
         _searchEngine.ResultAvaliableEvent += _searchEngine_ResultAvaliableEvent;
@@ -32,10 +36,14 @@ public partial class PageListViewModel : ObservableObject
     {
         Pages.Clear();
         foreach (var page in eventArgs.Pages) {
-            Pages.Add(page);
+            var pageVM = _serviceProvider.GetRequiredService<PageViewModel>();
+            pageVM.Title = page.Title;
+            pageVM.Contents = page.Contents;
+            pageVM.Tags = page.Tags;
+            Pages.Add(pageVM);
         }
     }
 
     [ObservableProperty]
-    private ObservableCollection<PageData> pages = new ObservableCollection<PageData>();
+    private ObservableCollection<PageViewModel> pages = new ObservableCollection<PageViewModel>();
 }

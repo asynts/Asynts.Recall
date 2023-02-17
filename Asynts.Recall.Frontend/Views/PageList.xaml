@@ -4,15 +4,16 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Asynts.Recall.Frontend.Views"
+      xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
       xmlns:viewmodel="clr-namespace:Asynts.Recall.Frontend.ViewModels"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       d:DataContext="{d:DesignInstance Type=viewmodel:PageListViewModel}">
 
-    <ItemsControl ItemsSource="{Binding Pages}" Padding="2px">
+    <ItemsControl ItemsSource="{Binding Path=Pages}" Padding="2px">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <local:Page DataContext="{Binding .}" Margin="2px" />
+                <local:Page DataContext="{Binding Path=., diag:PresentationTraceSources.TraceLevel=High}" Margin="2px" />
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>
