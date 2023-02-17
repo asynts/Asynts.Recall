@@ -41,6 +41,7 @@ namespace Asynts.Recall.Frontend.Views
             });
 
             services.AddSingleton<ISearchService, SearchService>();
+            services.AddSingleton<IRoutingService, RoutingService>();
 
             services.AddSingleton<ObjectIDGenerator>();
 

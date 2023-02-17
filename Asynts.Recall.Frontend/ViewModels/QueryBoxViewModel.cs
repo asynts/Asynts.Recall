@@ -12,10 +12,11 @@ namespace Asynts.Recall.Frontend.ViewModels;
 
 public partial class QueryBoxViewModel : ObservableObject
 {
-    readonly ISearchService _searchService;
-    public QueryBoxViewModel(ISearchService searchService)
+    private readonly IRoutingService _routingService;
+
+    public QueryBoxViewModel(IRoutingService routingService)
     {
-        _searchService = searchService;
+        _routingService = routingService;
     }
 
     [ObservableProperty]
@@ -27,11 +28,11 @@ public partial class QueryBoxViewModel : ObservableObject
     [RelayCommand]
     public void SubmitQuery()
     {
-        var searchQueryData = ParseQuery();
-        _searchService.UpdateSearchQueryAsync(searchQueryData);
+        var route = ParseQuery();
+        _routingService.Navigate(route);
     }
 
-    private SearchQueryData ParseQuery()
+    private RouteData ParseQuery()
     {
         var interestingTerms = new List<string>();
         var requiredTags = new List<string>();
@@ -47,11 +48,11 @@ public partial class QueryBoxViewModel : ObservableObject
             }
         }
 
-        return new SearchQueryData
+        return new PageSearchRouteData
         {
             InterestingTerms = interestingTerms,
             RequiredTags = requiredTags,
-            RawTextQuery = RawQuery,
+            RawText = RawQuery,
         };
     }
 }

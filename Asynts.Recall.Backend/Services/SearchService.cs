@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+
 using Asynts.Recall.Backend.Persistance;
 using Asynts.Recall.Backend.Persistance.Data;
 
@@ -28,7 +29,7 @@ public class SearchService : ISearchService, IDisposable
     public event SearchResultAvaliableHandler? ResultAvaliableEvent;
 
     private CancellationTokenSource? SearchQueryCancellationSource = null;
-    public Task UpdateSearchQueryAsync(SearchQueryData searchQuery)
+    public Task UpdateSearchQueryAsync(PageSearchRouteData searchQuery)
     {
         if (SearchQueryCancellationSource != null)
         {
@@ -67,7 +68,7 @@ public class SearchService : ISearchService, IDisposable
             }, cancellationToken);
     }
 
-    public IEnumerable<PageData> Search(SearchQueryData query)
+    public IEnumerable<PageData> Search(PageSearchRouteData query)
     {
         return _pageRepository.All()
             // Only include results that contain all the required tags.
@@ -77,7 +78,7 @@ public class SearchService : ISearchService, IDisposable
             .OrderByDescending(page => ScoreSearchResult(query, page));
     }
 
-    private float ScoreSearchResult(SearchQueryData query, PageData content)
+    private float ScoreSearchResult(PageSearchRouteData query, PageData content)
     {
         float score = 0;
 
@@ -93,11 +94,11 @@ public class SearchService : ISearchService, IDisposable
             }
         }
 
-        if (content.Title.Contains(query.RawTextQuery, StringComparison.InvariantCulture))
+        if (content.Title.Contains(query.RawText, StringComparison.InvariantCulture))
         {
             score += 20;
         }
-        if (content.Contents.Contains(query.RawTextQuery, StringComparison.InvariantCulture))
+        if (content.Contents.Contains(query.RawText, StringComparison.InvariantCulture))
         {
             score += 10;
         }

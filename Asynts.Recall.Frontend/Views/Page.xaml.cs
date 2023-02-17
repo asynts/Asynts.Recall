@@ -22,7 +22,7 @@ namespace Asynts.Recall.Frontend.Views
 
         private void Grid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs eventArgs)
         {
-            ViewModel.NavigateDetailsPage(NavigationService.GetNavigationService(this));
+            ViewModel.ShowDetailsPage();
         }
     }
 }

@@ -9,16 +9,22 @@ using CommunityToolkit.Mvvm.Input;
 using Asynts.Recall.Frontend.Views;
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using Asynts.Recall.Backend.Services;
+using Asynts.Recall.Backend.Persistance.Data;
+
 
 namespace Asynts.Recall.Frontend.ViewModels
 {
     public partial class PageViewModel : ObservableObject
     {
-        public long Id { get; private set; }
+        public long DebugId { get; private set; }
 
-        public PageViewModel(ObjectIDGenerator idGenerator)
+        private readonly IRoutingService _routingService;
+
+        public PageViewModel(ObjectIDGenerator idGenerator, IRoutingService routingService)
         {
-            Id = idGenerator.GetId(this, out _);
+            DebugId = idGenerator.GetId(this, out _);
+            this._routingService = routingService;
         }
 
         [ObservableProperty]
@@ -31,11 +37,13 @@ namespace Asynts.Recall.Frontend.ViewModels
         private IList<string> tags = new List<string> { "tag_1", "tag_2", "tag_3" };
 
         [RelayCommand]
-        public void NavigateDetailsPage(NavigationService navigationService)
+        public void ShowDetailsPage()
         {
-            var pageDetailsView = new PageDetails();
-            pageDetailsView.DataContext = this;
-            navigationService.Navigate(pageDetailsView);
+            _routingService.Navigate(new PageDetailsRouteData
+            {
+                // FIXME: Get a proper id here.
+                PageId = 0,
+            });
         }
     }
 }

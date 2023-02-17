@@ -19,5 +19,3 @@
 
 -	Essentially, I need a state machine that can be in three states: `Search{ SearchQueryData }`, `Page{ PageId }` or `Tags{ RequiredTags }`.
 	One method would be to add more stuff to `SearchQueryData` or to add a wrapper type that can contain any of them.
-
--	One approach would be a `Na` that takes care of routing.
