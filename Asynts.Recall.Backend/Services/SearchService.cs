@@ -25,7 +25,7 @@ public class SearchService : ISearchService, IDisposable
         SearchQueryCancellationSource?.Dispose();
     }
 
-    public event SearchEngineResultAvaliableHandler? ResultAvaliableEvent;
+    public event SearchResultAvaliableHandler? ResultAvaliableEvent;
 
     private CancellationTokenSource? SearchQueryCancellationSource = null;
     public Task UpdateSearchQueryAsync(SearchQueryData searchQuery)
@@ -60,7 +60,7 @@ public class SearchService : ISearchService, IDisposable
                             return;
                         }
 
-                        ResultAvaliableEvent?.Invoke(this, new SearchEngineResultAvaliableEventArgs(pages));
+                        ResultAvaliableEvent?.Invoke(this, new SearchResultAvaliableEventArgs(pages));
                     });
                 }
                 catch (OperationCanceledException) { }

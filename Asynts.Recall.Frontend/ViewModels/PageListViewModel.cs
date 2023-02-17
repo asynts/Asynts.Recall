@@ -36,7 +36,7 @@ public partial class PageListViewModel : ObservableObject
         });
     }
 
-    private void _searchEngine_ResultAvaliableEvent(object sender, SearchEngineResultAvaliableEventArgs eventArgs)
+    private void _searchEngine_ResultAvaliableEvent(object sender, SearchResultAvaliableEventArgs eventArgs)
     {
         Pages.Clear();
         foreach (var page in eventArgs.Pages) {

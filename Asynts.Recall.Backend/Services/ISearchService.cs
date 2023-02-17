@@ -6,21 +6,21 @@ using Asynts.Recall.Backend.Persistance.Data;
 
 namespace Asynts.Recall.Backend.Services;
 
-public class SearchEngineResultAvaliableEventArgs : EventArgs
+public class SearchResultAvaliableEventArgs : EventArgs
 {
     public IList<PageData> Pages { get; private set; }
 
-    public SearchEngineResultAvaliableEventArgs(IList<PageData> pages)
+    public SearchResultAvaliableEventArgs(IList<PageData> pages)
     {
         Pages = pages;
     }
 };
 
-public delegate void SearchEngineResultAvaliableHandler(object sender, SearchEngineResultAvaliableEventArgs eventArgs);
+public delegate void SearchResultAvaliableHandler(object sender, SearchResultAvaliableEventArgs eventArgs);
 
 public interface ISearchService
 {
-    public event SearchEngineResultAvaliableHandler? ResultAvaliableEvent;
+    public event SearchResultAvaliableHandler? ResultAvaliableEvent;
 
     IEnumerable<PageData> Search(SearchQueryData query);
     Task UpdateSearchQueryAsync(SearchQueryData searchQuery);
