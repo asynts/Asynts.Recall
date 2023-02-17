@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Threading;
 
@@ -46,6 +47,8 @@ public class RoutingService : IRoutingService
 
     public void Navigate(RouteData location)
     {
+        Debug.WriteLine($"[RoutingService.Navigate] location={location}");
+
         locations.Add(location);
 
         NotifyRouteChanged();

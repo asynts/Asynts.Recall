@@ -6,12 +6,22 @@
         xmlns:local="clr-namespace:Asynts.Recall.Frontend.Views"
         xmlns:viewmodel="clr-namespace:Asynts.Recall.Frontend.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewmodel:PageListViewModel}">
+            <local:PageList DataContext="{Binding}" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodel:PageViewModel}">
+            <local:Page DataContext="{Binding}" Padding="4px" />
+        </DataTemplate>
+    </Window.Resources>
+    
     <StackPanel>
         <local:QueryBox />
 
         <Separator Background="Black" Margin="0" />
 
-        <Frame Source="PageList.xaml" NavigationUIVisibility="Hidden" />
+        <ContentControl Content="{Binding CurrentViewModel}" />
     </StackPanel>
 </Window>

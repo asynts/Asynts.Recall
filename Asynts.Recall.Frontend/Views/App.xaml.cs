@@ -48,6 +48,7 @@ namespace Asynts.Recall.Frontend.Views
             services.AddTransient<PageListViewModel>();
             services.AddTransient<QueryBoxViewModel>();
             services.AddTransient<PageViewModel>();
+            services.AddTransient<MainWindowViewModel>();
 
             return services.BuildServiceProvider();
         }
