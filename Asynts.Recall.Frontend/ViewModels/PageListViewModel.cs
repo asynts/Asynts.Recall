@@ -25,27 +25,29 @@ public partial class PageListViewModel : ObservableObject
         _serviceProvider = serviceProvider;
         _searchService = searchService;
 
-        _searchService.ResultAvaliableEvent += _searchEngine_ResultAvaliableEvent;
-
-        _searchService.UpdateSearchQueryAsync(new PageSearchRouteData
+        // Maybe, the result is already avaliable, otherwise, we will get an event when it becomes avaliable.
+        if (_searchService.LastSearchResult != null)
         {
-            RequiredTags = new List<string>(),
-            InterestingTerms = new List<string>(),
-            RawText = "",
-        });
+            LoadPages(_searchService.LastSearchResult!);
+        }
+        _searchService.ResultAvaliableEvent += _searchEngine_ResultAvaliableEvent;
     }
 
     private void _searchEngine_ResultAvaliableEvent(object sender, SearchResultAvaliableEventArgs eventArgs)
     {
+        LoadPages(eventArgs.Pages);
+    }
+
+    private void LoadPages(IList<PageData> pages)
+    {
         Pages.Clear();
-        foreach (var page in eventArgs.Pages) {
+        foreach (var page in pages)
+        {
             var pageVM = _serviceProvider.GetRequiredService<PageViewModel>();
             pageVM.Title = page.Title;
             pageVM.Contents = page.Contents;
             pageVM.Tags = page.Tags;
             Pages.Add(pageVM);
-
-            Debug.WriteLine($"[PageListViewModel._searchEngine_ResultAvaliableEvent] adding page id={pageVM.DebugId}");
         }
     }
 

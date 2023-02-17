@@ -20,8 +20,10 @@ public delegate void SearchResultAvaliableHandler(object sender, SearchResultAva
 
 public interface ISearchService
 {
+    IList<PageData>? LastSearchResult { get; }
+
     // Emitted in UI thread.
-    public event SearchResultAvaliableHandler? ResultAvaliableEvent;
+    event SearchResultAvaliableHandler? ResultAvaliableEvent;
 
     IEnumerable<PageData> Search(PageSearchRouteData searchQuery);
     Task UpdateSearchQueryAsync(PageSearchRouteData searchQuery);

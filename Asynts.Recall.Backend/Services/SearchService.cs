@@ -28,6 +28,8 @@ public class SearchService : ISearchService, IDisposable
 
     public event SearchResultAvaliableHandler? ResultAvaliableEvent;
 
+    public IList<PageData>? LastSearchResult { get; private set; }
+
     private CancellationTokenSource? SearchQueryCancellationSource = null;
     public Task UpdateSearchQueryAsync(PageSearchRouteData searchQuery)
     {
@@ -61,6 +63,7 @@ public class SearchService : ISearchService, IDisposable
                             return;
                         }
 
+                        LastSearchResult = pages;
                         ResultAvaliableEvent?.Invoke(this, new SearchResultAvaliableEventArgs(pages));
                     });
                 }

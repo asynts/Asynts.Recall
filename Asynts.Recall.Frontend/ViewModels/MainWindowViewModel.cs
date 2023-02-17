@@ -3,6 +3,7 @@ using Asynts.Recall.Backend.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Asynts.Recall.Frontend.ViewModels;
@@ -19,6 +20,13 @@ public partial class MainWindowViewModel : ObservableObject
 
         currentViewModel = _serviceProvider.GetRequiredService<PageListViewModel>();
         _routingService.RouteChangedEvent += _routingService_RouteChangedEvent;
+
+        _routingService.Navigate(new PageSearchRouteData
+        {
+            RequiredTags = new List<string>(),
+            InterestingTerms = new List<string>(),
+            RawText = "",
+        });
     }
 
     private void _routingService_RouteChangedEvent(object sender, RouteChangedEventArgs eventArgs)
