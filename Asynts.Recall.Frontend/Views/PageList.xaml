@@ -9,7 +9,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       d:DataContext="{d:DesignInstance Type=viewmodel:PageListViewModel}">
 
-    <ItemsControl ItemsSource="{Binding PageList}" Padding="2px">
+    <ItemsControl ItemsSource="{Binding Pages}" Padding="2px">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <local:Page DataContext="{Binding .}" Margin="2px" />

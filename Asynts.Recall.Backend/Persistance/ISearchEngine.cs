@@ -8,11 +8,11 @@ namespace Asynts.Recall.Backend.Persistance;
 
 public class SearchEngineResultAvaliableEventArgs : EventArgs
 {
-    public IList<PageData> ContentList { get; private set; }
+    public IList<PageData> Pages { get; private set; }
 
-    public SearchEngineResultAvaliableEventArgs(IList<PageData> contentList)
+    public SearchEngineResultAvaliableEventArgs(IList<PageData> pages)
     {
-        ContentList = contentList;
+        Pages = pages;
     }
 };
 

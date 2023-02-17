@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
 using Asynts.Recall.Backend.Persistance;
 using Asynts.Recall.Backend.Persistance.Data;
-using System.Diagnostics;
 
 namespace Asynts.Recall.Frontend.ViewModels;
 
@@ -29,9 +30,12 @@ public partial class PageListViewModel : ObservableObject
 
     private void _searchEngine_ResultAvaliableEvent(object sender, SearchEngineResultAvaliableEventArgs eventArgs)
     {
-        PageList = eventArgs.ContentList;
+        Pages.Clear();
+        foreach (var page in eventArgs.Pages) {
+            Pages.Add(page);
+        }
     }
 
     [ObservableProperty]
-    private IList<PageData> pageList = new List<PageData>();
+    private ObservableCollection<PageData> pages = new ObservableCollection<PageData>();
 }
