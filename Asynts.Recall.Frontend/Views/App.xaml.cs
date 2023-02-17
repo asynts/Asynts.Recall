@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Asynts.Recall.Backend.Persistance;
 using Asynts.Recall.Frontend.ViewModels;
 using System.Windows.Threading;
+using System.Runtime.Serialization;
 
 namespace Asynts.Recall.Frontend.Views
 {
@@ -39,6 +40,8 @@ namespace Asynts.Recall.Frontend.Views
             });
 
             services.AddSingleton<ISearchEngine, SearchEngine>();
+
+            services.AddSingleton<ObjectIDGenerator>();
 
             services.AddTransient<PageListViewModel>();
             services.AddTransient<QueryBoxViewModel>();

@@ -90,13 +90,36 @@
 
 -   I verified again and `DataContext` is `null` when we assign to it in the constructor.
 
+-   I tried removing the default value assignments in `PageViewModel`, but this didn't do anything.
+
+-   I added a button in `Page` that would print out the current value, it's also the default value.
+
+    -   I tried printing both `title` and `Title` and they both have the same value.
+
+-   The constructor of `PageViewModel` runs four times.
+    This is the expected value, since the view creates a default model and then overrides it with the new model.
+
+-   I added some ids to the view models to help with debugging:
+    ```none
+    [PageListViewModel._searchEngine_ResultAvaliableEvent] adding page id=2
+    [PageListViewModel._searchEngine_ResultAvaliableEvent] adding page id=3
+    [Page.Page] vm.id=4
+    [Page.Page] vm.id=5
+    [PageViewModel.Print] id=5
+    ```
+    The last message is from the button press.
+    This clearly shows that the default data context is used.
+
 ### Tasks
 
--   Verify again, if we are overriding something in the construtor.
+-   Print out the address of the data context being used.
+    Maybe print out in the constructor?
 
 -   If I inline the code from `Page.xaml`, does this solve the issue?
 
 ### Theories
+
+-   I suspect, that this is a naming collision with the builtin `Page`.
 
 -   I suspect, that assigning to the `DataContext` in XAML isn't possible if it's already set in the constructor.
 
@@ -105,3 +128,6 @@
     -   However, it could be that it doesn't want to override it unless it's already null.
 
 -   I suspect, that when XAML sets the `DataContext` it doesn't notify the UI correctly and thus it keeps rendering the old version.
+
+-   I suspect, that the rendering engine reads the values and connects the event listeners after that.
+    If it is changed before the event handlers are registered, it would not notice.

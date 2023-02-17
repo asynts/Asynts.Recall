@@ -9,16 +9,21 @@ using Asynts.Recall.Backend.Persistance;
 using Asynts.Recall.Backend.Persistance.Data;
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using System.Runtime.Serialization;
 
 namespace Asynts.Recall.Frontend.ViewModels;
 
 public partial class PageListViewModel : ObservableObject
 {
+    public long Id { get; private set; }
+
     private readonly IServiceProvider _serviceProvider;
     readonly ISearchEngine _searchEngine;
 
-    public PageListViewModel(IServiceProvider serviceProvider, ISearchEngine searchEngine)
+    public PageListViewModel(IServiceProvider serviceProvider, ISearchEngine searchEngine, ObjectIDGenerator idGenerator)
     {
+        Id = idGenerator.GetId(this, out _);
+
         _serviceProvider = serviceProvider;
         _searchEngine = searchEngine;
 
@@ -41,6 +46,8 @@ public partial class PageListViewModel : ObservableObject
             pageVM.Contents = page.Contents;
             pageVM.Tags = page.Tags;
             Pages.Add(pageVM);
+
+            Debug.WriteLine($"[PageListViewModel._searchEngine_ResultAvaliableEvent] adding page id={pageVM.Id}");
         }
     }
 

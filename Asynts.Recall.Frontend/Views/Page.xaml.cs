@@ -3,6 +3,7 @@
 using Microsoft.Extensions.DependencyInjection;
 
 using Asynts.Recall.Frontend.ViewModels;
+using System.Diagnostics;
 
 namespace Asynts.Recall.Frontend.Views
 {
@@ -23,7 +24,9 @@ namespace Asynts.Recall.Frontend.Views
             //        when we assign here.
             //
             //        I suspect that it overrides it again and doesn't connect the event handlers properly.
-            DataContext = App.Current.Services.GetRequiredService<PageViewModel>();
+            var vm = App.Current.Services.GetRequiredService<PageViewModel>();
+            Debug.WriteLine($"[Page.Page] vm.id={vm.Id}");
+            DataContext = vm;
         }
     }
 }
