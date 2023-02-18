@@ -13,7 +13,7 @@
     <ItemsControl ItemsSource="{Binding Path=Pages}" Padding="2px">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <local:Page DataContext="{Binding}" Margin="2px" ShowPageDetailsCommand="{Binding ShowDetailsPageCommand}" />
+                <local:Page DataContext="{Binding}" Margin="2px" ShowPageDetailsCommand="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowPageDetailsCommand, diag:PresentationTraceSources.TraceLevel=High}" />
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>

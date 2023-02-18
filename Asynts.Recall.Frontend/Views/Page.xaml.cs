@@ -22,11 +22,15 @@ namespace Asynts.Recall.Frontend.Views
             InitializeComponent();
         }
 
-        public RelayCommand<long>? ShowPageDetailsCommand { get; set; }
+        public RelayCommand<long>? ShowPageDetailsCommand
+        {
+            get => (RelayCommand<long>?)GetValue(ShowPageDetailsCommandProperty);
+            set => SetValue(ShowPageDetailsCommandProperty, value);
+        }
 
         public static readonly DependencyProperty ShowPageDetailsCommandProperty = DependencyProperty.Register(
             name: nameof(ShowPageDetailsCommand),
-            propertyType: typeof(RelayCommand),
+            propertyType: typeof(RelayCommand<long>),
             ownerType: typeof(Page)
         );
 
