@@ -47,6 +47,7 @@ public partial class PageSearchViewModel : ObservableObject
             pageVM.Title = page.Title;
             pageVM.Contents = page.Contents;
             pageVM.Tags = page.Tags;
+            pageVM.Id = page.Id;
             Pages.Add(pageVM);
         }
     }

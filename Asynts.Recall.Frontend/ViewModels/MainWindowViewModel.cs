@@ -37,9 +37,11 @@ public partial class MainWindowViewModel : ObservableObject
         {
             CurrentViewModel = _serviceProvider.GetRequiredService<PageSearchViewModel>();
         }
-        else if (eventArgs.Route is PageDetailsRouteData)
+        else if (eventArgs.Route is PageDetailsRouteData route)
         {
-            CurrentViewModel = _serviceProvider.GetRequiredService<PageViewModel>();
+            var pageVM = _serviceProvider.GetRequiredService<PageViewModel>();
+            pageVM.Id = route.PageId;
+            CurrentViewModel = pageVM;
         }
     }
 

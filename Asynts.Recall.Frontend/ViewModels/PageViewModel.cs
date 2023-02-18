@@ -27,7 +27,6 @@ namespace Asynts.Recall.Frontend.ViewModels
             this._routingService = routingService;
         }
 
-        // FIXME: This needs to be set somewhere.
         [ObservableProperty]
         private long id = 0;
 
@@ -45,8 +44,7 @@ namespace Asynts.Recall.Frontend.ViewModels
         {
             _routingService.Navigate(new PageDetailsRouteData
             {
-                // FIXME: Get a proper id here.
-                PageId = 0,
+                PageId = Id,
             });
         }
     }
