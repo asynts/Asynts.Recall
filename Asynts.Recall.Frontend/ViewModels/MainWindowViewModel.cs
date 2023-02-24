@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows.Threading;
 
 namespace Asynts.Recall.Frontend.ViewModels;
 
@@ -13,7 +14,7 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly IRoutingService _routingService;
     private readonly IServiceProvider _serviceProvider;
 
-    public MainWindowViewModel(IRoutingService routingService, IServiceProvider serviceProvider)
+    public MainWindowViewModel(IRoutingService routingService, IServiceProvider serviceProvider, Dispatcher dispatcher)
     {
         _routingService = routingService;
         _serviceProvider = serviceProvider;
@@ -21,11 +22,17 @@ public partial class MainWindowViewModel : ObservableObject
         currentViewModel = _serviceProvider.GetRequiredService<PageSearchViewModel>();
         _routingService.RouteChangedEvent += _routingService_RouteChangedEvent;
 
-        _routingService.Navigate(new PageSearchRouteData
+        // FIXME: If I don't use the event queue here, it doesn't work.
+        //        I don't understand why.
+        //        Somehow, we end up calling `SetSearchQuery` three times instead of twice which is weird.
+        dispatcher.BeginInvoke(() =>
         {
-            RequiredTags = new List<string>(),
-            InterestingTerms = new List<string>(),
-            RawText = "",
+            _routingService.Navigate(new PageSearchRouteData
+            {
+                RequiredTags = new List<string>(),
+                InterestingTerms = new List<string>(),
+                RawText = "",
+            });
         });
     }
 

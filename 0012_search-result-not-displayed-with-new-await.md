@@ -131,15 +131,69 @@
 
     I conclude that it functions similar to `setImmediate` in JavaScript.
 
+-   When I made that change with `await` I expected this to fix the issue with cancellation, but it doesn't seem like this worked:
+    ```csharp
+    [RoutingService.Navigate] location=PageSearchRouteData { RequiredTags = System.Collections.Generic.List`1[System.String], InterestingTerms = System.Collections.Generic.List`1[System.String], RawText =  }
+    [PageSearchViewModel._routingService_RouteChangedEvent] route=PageSearchRouteData { RequiredTags = System.Collections.Generic.List`1[System.String], InterestingTerms = System.Collections.Generic.List`1[System.String], RawText =  }
+    [PageSearchViewModel.SetSearchQuery]: cancelling existing request
+    [MainWindowViewModel._routingService_RouteChangedEvent] route=PageSearchRouteData { RequiredTags = System.Collections.Generic.List`1[System.String], InterestingTerms = System.Collections.Generic.List`1[System.String], RawText =  }
+    [PageSearchViewModel.SetSearchQuery]: cancelling existing request
+    [PageSearchViewModel.SetSearchQuery]: got result
+    [PageSearchViewModel.SetSearchQuery]: got result
+    ```
+
+-   I was able to resolve this issue with `Dispatcher.BeginInvoke`:
+    ```csharp
+    dispatcher.BeginInvoke(() =>
+    {
+        _routingService.Navigate(new PageSearchRouteData
+        {
+            RequiredTags = new List<string>(),
+            InterestingTerms = new List<string>(),
+            RawText = "",
+        });
+    });
+    ```
+    I don't understand, why this works.
+
+-   This is what the new debug output looks like:
+    ```none
+    [RoutingService.Navigate] location=PageSearchRouteData { RequiredTags = System.Collections.Generic.List`1[System.String], InterestingTerms = System.Collections.Generic.List`1[System.String], RawText =  }
+    [PageSearchViewModel._routingService_RouteChangedEvent] route=PageSearchRouteData { RequiredTags = System.Collections.Generic.List`1[System.String], InterestingTerms = System.Collections.Generic.List`1[System.String], RawText =  }
+    [PageSearchViewModel.SetSearchQuery]: cancelling existing request
+    [MainWindowViewModel._routingService_RouteChangedEvent] route=PageSearchRouteData { RequiredTags = System.Collections.Generic.List`1[System.String], InterestingTerms = System.Collections.Generic.List`1[System.String], RawText =  }
+    [PageSearchViewModel.SetSearchQuery]: cancelling existing request
+    [PageSearchViewModel._routingService_RouteChangedEvent] route=PageSearchRouteData { RequiredTags = System.Collections.Generic.List`1[System.String], InterestingTerms = System.Collections.Generic.List`1[System.String], RawText =  }
+    [PageSearchViewModel.SetSearchQuery]: cancelling existing request
+    [PageSearchViewModel.SetSearchQuery]: got result
+    [PageSearchViewModel.SetSearchQuery]: got result
+    [PageSearchViewModel.SetSearchQuery]: got result
+    ```
+    Now, it runs three times, which is very unexpected.
+
+-   Another unrelated issue is that submitting an empty query after visiting details page doesn't work either.
+
 ### Tasks
+
+-   Create a minimal reproducible example.
 
 -	Go through the code step by step.
 
 -   Verify that the bindings are intact.
 
+-   Look if there are multiple `PageSearchViewModel` objects.
+
+-   Verify that the cancellation works as intended.
+
 ### Theories
+
+-   I think, the key is to understand why the requests don't cancel each other.
 
 -	I suspect, that both the event handler in `MainWindowViewModel` and in `PageSearchViewModel` run.
 	They cancel each other or clear each other.
 
 -	I suspect, that we handle the event that updates the UI before the UI has attached it's own event handlers.
+
+-   I suspect, that there are multiple `PageSearchViewModel` objects.
+
+-   I suspect, that I am using the wrong `CancellationToken`.
