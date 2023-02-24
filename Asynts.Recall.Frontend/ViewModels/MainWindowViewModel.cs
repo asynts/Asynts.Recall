@@ -1,4 +1,5 @@
-﻿using Asynts.Recall.Backend.Persistance.Data;
+﻿using Asynts.Recall.Backend.Persistance;
+using Asynts.Recall.Backend.Persistance.Data;
 using Asynts.Recall.Backend.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -17,13 +18,18 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly IRoutingService _routingService;
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger _logger;
+    private readonly IPageRepository _pageRepository;
 
-    public MainWindowViewModel(IRoutingService routingService, IServiceProvider serviceProvider, ILogger<MainWindowViewModel> logger)
+    public MainWindowViewModel(
+        IRoutingService routingService,
+        IServiceProvider serviceProvider,
+        ILogger<MainWindowViewModel> logger,
+        IPageRepository pageRepository)
     {
         _routingService = routingService;
         _serviceProvider = serviceProvider;
         _logger = logger;
-
+        _pageRepository = pageRepository;
         _routingService.RouteChangedEvent += _routingService_RouteChangedEvent;
 
         _routingService.Navigate(new PageSearchRouteData
@@ -47,8 +53,8 @@ public partial class MainWindowViewModel : ObservableObject
         }
         else if (eventArgs.Route is PageDetailsRouteData pageDetailsRoute)
         {
-            var pageVM = _serviceProvider.GetRequiredService<PageViewModel>();
-            pageVM.Id = pageDetailsRoute.PageId;
+            var pageData = _pageRepository.GetById(pageDetailsRoute.PageId);
+            var pageVM = ActivatorUtilities.CreateInstance<PageViewModel>(_serviceProvider, pageData);
 
             CurrentViewModel = pageVM;
         }

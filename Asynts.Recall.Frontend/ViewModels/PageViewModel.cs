@@ -1,17 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.Serialization;
-using System.Windows.Navigation;
-
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
-using Asynts.Recall.Frontend.Views;
-using System;
-using Microsoft.Extensions.DependencyInjection;
 using Asynts.Recall.Backend.Services;
 using Asynts.Recall.Backend.Persistance.Data;
-
+using Asynts.Recall.Backend.Persistance;
 
 namespace Asynts.Recall.Frontend.ViewModels
 {
@@ -21,10 +14,19 @@ namespace Asynts.Recall.Frontend.ViewModels
 
         private readonly IRoutingService _routingService;
 
-        public PageViewModel(ObjectIDGenerator idGenerator, IRoutingService routingService)
+        public PageViewModel(
+            PageData pageData,
+            ObjectIDGenerator idGenerator,
+            IRoutingService routingService)
         {
+            _routingService = routingService;
+
+            Id = pageData.Id;
+            Title = pageData.Title;
+            Contents = pageData.Contents;
+            Tags = pageData.Tags;
+
             DebugId = idGenerator.GetId(this, out _);
-            this._routingService = routingService;
         }
 
         [ObservableProperty]

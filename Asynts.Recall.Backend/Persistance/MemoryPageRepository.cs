@@ -1,21 +1,31 @@
 ﻿using System.Collections.Generic;
-
+using System.Diagnostics;
+using System.Linq;
 using Asynts.Recall.Backend.Persistance.Data;
 
 namespace Asynts.Recall.Backend.Persistance;
 
 public class MemoryPageRepository : IPageRepository
 {
-    private List<PageData> pages = new List<PageData>();
+    private Dictionary<long, PageData> pages = new Dictionary<long, PageData>();
 
     public void Add(PageData page)
     {
-        pages.Add(page);
+        var successful = pages.TryAdd(page.Id, page);
+        Debug.Assert(successful);
     }
 
     public IEnumerable<PageData> All()
     {
-        return pages;
+        return pages.Select(kvp => kvp.Value);
+    }
+
+    public PageData GetById(long id)
+    {
+        var successful = pages.TryGetValue(id, out var page);
+        Debug.Assert(successful);
+
+        return page!;
     }
 
     public void LoadExampleData()

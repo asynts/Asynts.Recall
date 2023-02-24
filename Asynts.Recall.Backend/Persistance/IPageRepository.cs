@@ -7,4 +7,5 @@ namespace Asynts.Recall.Backend.Persistance;
 public interface IPageRepository
 {
     IEnumerable<PageData> All();
+    PageData GetById(long id);
 }

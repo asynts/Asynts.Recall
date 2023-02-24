@@ -85,13 +85,9 @@ public partial class PageSearchViewModel : ObservableObject
     private void LoadPages(IList<PageData> pages)
     {
         Pages.Clear();
-        foreach (var page in pages)
+        foreach (var pageData in pages)
         {
-            var pageVM = _serviceProvider.GetRequiredService<PageViewModel>();
-            pageVM.Title = page.Title;
-            pageVM.Contents = page.Contents;
-            pageVM.Tags = page.Tags;
-            pageVM.Id = page.Id;
+            var pageVM = ActivatorUtilities.CreateInstance<PageViewModel>(_serviceProvider, pageData);
             Pages.Add(pageVM);
         }
     }
