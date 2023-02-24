@@ -67,6 +67,7 @@ public partial class PageSearchViewModel : ObservableObject
             return;
         }
 
+        // FIXME: I hope this runs in the correct synchronization context!
         LoadPages(pages);
     }
 
