@@ -33,14 +33,18 @@ public partial class MainWindowViewModel : ObservableObject
     {
         Debug.WriteLine($"[MainWindowViewModel._routingService_RouteChangedEvent] route={eventArgs.Route}");
 
-        if (eventArgs.Route is PageSearchRouteData)
+        if (eventArgs.Route is PageSearchRouteData pageSearchRoute)
         {
-            CurrentViewModel = _serviceProvider.GetRequiredService<PageSearchViewModel>();
+            var pageSearchVM = _serviceProvider.GetRequiredService<PageSearchViewModel>();
+            pageSearchVM.SetSearchQuery(pageSearchRoute);
+
+            CurrentViewModel = pageSearchVM;
         }
-        else if (eventArgs.Route is PageDetailsRouteData route)
+        else if (eventArgs.Route is PageDetailsRouteData pageDetailsRoute)
         {
             var pageVM = _serviceProvider.GetRequiredService<PageViewModel>();
-            pageVM.Id = route.PageId;
+            pageVM.Id = pageDetailsRoute.PageId;
+
             CurrentViewModel = pageVM;
         }
     }

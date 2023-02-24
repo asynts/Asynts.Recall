@@ -10,14 +10,12 @@ namespace Asynts.Recall.Backend.Services;
 public class RoutingService : IRoutingService
 {
     private readonly Dispatcher _dispatcher;
-    private readonly ISearchService _searchService;
 
     private IList<RouteData> locations = new List<RouteData>();
 
-    public RoutingService(Dispatcher dispatcher, ISearchService searchService)
+    public RoutingService(Dispatcher dispatcher)
     {
         _dispatcher = dispatcher;
-        _searchService = searchService;
     }
 
     public RouteData Route => locations.Last();
@@ -56,11 +54,6 @@ public class RoutingService : IRoutingService
 
     private void NotifyRouteChanged()
     {
-        _dispatcher.BeginInvoke(() => RouteChangedEvent?.Invoke(this, new RouteChangedEventArgs(Route)));
-
-        if (Route is PageSearchRouteData searchRouteData)
-        {
-            _searchService.UpdateSearchQueryAsync(searchRouteData);
-        }    
+        _dispatcher.BeginInvoke(() => RouteChangedEvent?.Invoke(this, new RouteChangedEventArgs(Route))); 
     }
 }

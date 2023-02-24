@@ -3,77 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Threading;
 
 using Asynts.Recall.Backend.Persistance;
 using Asynts.Recall.Backend.Persistance.Data;
 
 namespace Asynts.Recall.Backend.Services;
 
-public class SearchService : ISearchService, IDisposable
+public class SearchService : ISearchService
 {
     private readonly IPageRepository _pageRepository;
-    private readonly Dispatcher _dispatcher;
 
-    public SearchService(IPageRepository pageRepository, Dispatcher dispatcher)
+    public SearchService(IPageRepository pageRepository)
     {
         _pageRepository = pageRepository;
-        _dispatcher = dispatcher;
     }
 
-    public void Dispose()
+    public IEnumerable<PageData> Search(PageSearchRouteData query, CancellationToken cancellationToken = default)
     {
-        SearchQueryCancellationSource?.Dispose();
-    }
+        // FIXME: What does 'AsParallel' do exactly?
 
-    public event SearchResultAvaliableHandler? ResultAvaliableEvent;
-
-    public IList<PageData>? LastSearchResult { get; private set; }
-
-    private CancellationTokenSource? SearchQueryCancellationSource = null;
-    public Task UpdateSearchQueryAsync(PageSearchRouteData searchQuery)
-    {
-        if (SearchQueryCancellationSource != null)
-        {
-            SearchQueryCancellationSource.Cancel();
-            SearchQueryCancellationSource.Dispose();
-        }
-
-        SearchQueryCancellationSource = new CancellationTokenSource();
-        var cancellationToken = SearchQueryCancellationSource.Token;
-
-        return Task
-            // We allow the search to be cancelled, if the thread pool hasn't started processing it yet.
-            .Run(() =>
-            {
-                try
-                {
-                    // We allow the search to be cancelled in the middle.
-                    var pages = Search(searchQuery)
-                        .AsParallel()
-                        .WithCancellation(cancellationToken)
-                        .ToList();
-
-                    // To avoid race conditions, we dispatch to an event queue before checking for cancellation.
-                    _dispatcher.BeginInvoke(() =>
-                    {
-                        // We allow cancellation even if the result is already ready.
-                        if (cancellationToken.IsCancellationRequested)
-                        {
-                            return;
-                        }
-
-                        LastSearchResult = pages;
-                        ResultAvaliableEvent?.Invoke(this, new SearchResultAvaliableEventArgs(pages));
-                    });
-                }
-                catch (OperationCanceledException) { }
-            }, cancellationToken);
-    }
-
-    public IEnumerable<PageData> Search(PageSearchRouteData query)
-    {
         return _pageRepository.All()
+            // Linq only allows parallel queries to be cancelled.
+            .AsParallel()
+            .WithCancellation(cancellationToken)
             // Only include results that contain all the required tags.
             // We consider tags to be hierarchical and a matching prefix is sufficient. 
             .Where(page => query.RequiredTags.All(requiredTag => page.Tags.Any(tag => tag.StartsWith(requiredTag))))

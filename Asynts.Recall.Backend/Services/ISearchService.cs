@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Asynts.Recall.Backend.Persistance.Data;
 
 namespace Asynts.Recall.Backend.Services;
 
-public class SearchResultAvaliableEventArgs : EventArgs
-{
-    public IList<PageData> Pages { get; private set; }
-
-    public SearchResultAvaliableEventArgs(IList<PageData> pages)
-    {
-        Pages = pages;
-    }
-};
-
-public delegate void SearchResultAvaliableHandler(object sender, SearchResultAvaliableEventArgs eventArgs);
-
 public interface ISearchService
 {
-    IList<PageData>? LastSearchResult { get; }
+    IEnumerable<PageData> Search(PageSearchRouteData searchQuery, CancellationToken cancellationToken = default);
 
-    // Emitted in UI thread.
-    event SearchResultAvaliableHandler? ResultAvaliableEvent;
-
-    IEnumerable<PageData> Search(PageSearchRouteData searchQuery);
-    Task UpdateSearchQueryAsync(PageSearchRouteData searchQuery);
+    Task<IList<PageData>> SearchAsync(PageSearchRouteData searchQuery, CancellationToken cancellationToken = default)
+    {
+        return Task
+            .Run<IList<PageData>>(() =>
+            {
+                return Search(searchQuery, cancellationToken).ToList();
+            }, cancellationToken)
+            // Ensure that we don't produce any result if the task has been cancelled.
+            // This must happen in the calling synchronization context.
+            .ContinueWith<IList<PageData>>((task, _) =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                return task.Result;
+            }, TaskScheduler.FromCurrentSynchronizationContext(), cancellationToken);
+    }
 }
