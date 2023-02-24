@@ -17,6 +17,14 @@ public partial class QueryBoxViewModel : ObservableObject
     public QueryBoxViewModel(IRoutingService routingService)
     {
         _routingService = routingService;
+
+        _routingService.RouteChangedEvent += _routingService_RouteChangedEvent;
+    }
+
+    private void _routingService_RouteChangedEvent(object sender, RouteChangedEventArgs eventArgs)
+    {
+        Query = eventArgs.Route.NormalizedQuery();
+        RawQuery = eventArgs.Route.RawQuery();
     }
 
     [ObservableProperty]
@@ -30,13 +38,6 @@ public partial class QueryBoxViewModel : ObservableObject
     {
         var route = ParseQuery();
         _routingService.Navigate(route);
-    }
-
-    [RelayCommand]
-    public void ShowPageDetails(long pageId)
-    {
-        Query = $"#{pageId} ";
-        SubmitQuery();
     }
 
     private RouteData ParseQuery()
