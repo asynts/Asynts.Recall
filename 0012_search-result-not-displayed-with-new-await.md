@@ -115,9 +115,27 @@
     }
     ```
 
+-   I am trying to establish if `Dispatcher.BeginInvoke` will run it immediately if on the UI thread:
+
+    -   The `Dispatcher.BeginInvoke` method will ultimately call `InvokeAsyncImpl` which calls `RequestProcessing`.
+        https://github.com/dotnet/wpf/blob/abe481539b97838c607bbe7b32da59f03a0f4367/src/Microsoft.DotNet.Wpf/src/WindowsBase/System/Windows/Threading/Dispatcher.cs#L960
+
+    -   This calls `CriticalRequestProcessing`.
+        https://github.com/dotnet/wpf/blob/abe481539b97838c607bbe7b32da59f03a0f4367/src/Microsoft.DotNet.Wpf/src/WindowsBase/System/Windows/Threading/Dispatcher.cs#L2400
+
+    -   This calls `UnsafeNativeMethods.TryPostMessage`.
+        -   I suspect, that the dispatcher will run code immediately if it's on the UI thread instead of something like `setImmediate` in JavaScript.'
+
+    -   According to the documentation this doesn't wait for the message to be processed.
+        https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-postmessagew
+
+    I conclude that it functions similar to `setImmediate` in JavaScript.
+
 ### Tasks
 
 -	Go through the code step by step.
+
+-   Verify that the bindings are intact.
 
 ### Theories
 
