@@ -1,6 +1,7 @@
 ﻿using Asynts.Recall.Backend.Persistance.Data;
 using Asynts.Recall.Backend.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -48,8 +49,19 @@ public partial class MainWindowViewModel : ObservableObject
 
             CurrentViewModel = pageVM;
         }
+
+        NavigateBackEnabled = _routingService.NavigateBackPossible;
+    }
+
+    [RelayCommand]
+    public void NavigateBack()
+    {
+        _routingService.TryBack();
     }
 
     [ObservableProperty]
     public ObservableObject? currentViewModel = null;
+
+    [ObservableProperty]
+    public bool navigateBackEnabled = false;
 }

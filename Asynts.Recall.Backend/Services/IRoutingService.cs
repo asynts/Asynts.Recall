@@ -21,6 +21,8 @@ public interface IRoutingService
 {
     public RouteData Route { get; }
 
+    public bool NavigateBackPossible { get; }
+
     // Emitted in UI thread.
     public event RouteChangedHandler? RouteChangedEvent;
 

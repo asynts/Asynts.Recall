@@ -20,6 +20,9 @@ public class RoutingService : IRoutingService
 
     public RouteData Route => locations.Last();
 
+    public bool NavigateBackPossible => locations.Count >= 2;
+
+
     public event RouteChangedHandler? RouteChangedEvent;
 
     public bool TryBack()

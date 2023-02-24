@@ -17,12 +17,19 @@
             <local:Page DataContext="{Binding}" Padding="4px" />
         </DataTemplate>
     </Window.Resources>
-    
-    <StackPanel>
-        <local:QueryBox x:Name="refQueryBox" />
 
-        <Separator Background="Black" Margin="0" />
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Navigate back" Command="{Binding NavigateBackCommand}" IsEnabled="{Binding NavigateBackEnabled}" />
+            </MenuItem>
+        </Menu>
+        <StackPanel>
+            <local:QueryBox x:Name="refQueryBox" />
 
-        <ContentControl Content="{Binding CurrentViewModel}" />
-    </StackPanel>
+            <Separator Background="Black" Margin="0" />
+
+            <ContentControl Content="{Binding CurrentViewModel}" />
+        </StackPanel>
+    </DockPanel>
 </Window>
