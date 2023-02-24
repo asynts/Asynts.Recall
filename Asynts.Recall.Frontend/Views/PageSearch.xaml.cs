@@ -19,8 +19,6 @@ namespace Asynts.Recall.Frontend.Views
         public PageSearch()
         {
             InitializeComponent();
-
-            DataContext = App.Current.Services.GetRequiredService<PageSearchViewModel>();
         }
 
         public RelayCommand<long>? ShowPageDetailsCommand

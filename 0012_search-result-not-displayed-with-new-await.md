@@ -173,6 +173,33 @@
 
 -   Another unrelated issue is that submitting an empty query after visiting details page doesn't work either.
 
+-   In the constructor of `MainWindowViewModel` I assigned to `CurrentViewModel`, this is what created the other `PageSearchViewModel`.
+
+    -   The new output afterwards:
+        ```none
+        [RoutingService.Navigate] location=PageSearchRouteData { RequiredTags = System.Collections.Generic.List`1[System.String], InterestingTerms = System.Collections.Generic.List`1[System.String], RawText =  }
+        [MainWindowViewModel._routingService_RouteChangedEvent] route=PageSearchRouteData { RequiredTags = System.Collections.Generic.List`1[System.String], InterestingTerms = System.Collections.Generic.List`1[System.String], RawText =  }
+        [PageSearchViewModel.SetSearchQuery]: cancelling existing request
+        [PageSearchViewModel.SetSearchQuery]: got result
+        [RoutingService.Navigate] location=PageSearchRouteData { RequiredTags = System.Collections.Generic.List`1[System.String], InterestingTerms = System.Collections.Generic.List`1[System.String], RawText =  }
+        [MainWindowViewModel._routingService_RouteChangedEvent] route=PageSearchRouteData { RequiredTags = System.Collections.Generic.List`1[System.String], InterestingTerms = System.Collections.Generic.List`1[System.String], RawText =  }
+        [PageSearchViewModel.SetSearchQuery]: cancelling existing request
+        [PageSearchViewModel._routingService_RouteChangedEvent] route=PageSearchRouteData { RequiredTags = System.Collections.Generic.List`1[System.String], InterestingTerms = System.Collections.Generic.List`1[System.String], RawText =  }
+        [PageSearchViewModel.SetSearchQuery]: cancelling existing request
+        [PageSearchViewModel._routingService_RouteChangedEvent] route=PageSearchRouteData { RequiredTags = System.Collections.Generic.List`1[System.String], InterestingTerms = System.Collections.Generic.List`1[System.String], RawText =  }
+        [PageSearchViewModel.SetSearchQuery]: cancelling existing request
+        [PageSearchViewModel.SetSearchQuery]: got result
+        [PageSearchViewModel.SetSearchQuery]: got result
+        [PageSearchViewModel.SetSearchQuery]: got result
+        ```
+
+    -   It's again broken even with the dispatcher.
+
+-   I found this line in `PageSearch.xaml.cs`:
+    ```csharp
+    DataContext = App.Current.Services.GetRequiredService<PageSearchViewModel>();
+    ```
+
 ### Tasks
 
 -   Create a minimal reproducible example.
@@ -197,3 +224,14 @@
 -   I suspect, that there are multiple `PageSearchViewModel` objects.
 
 -   I suspect, that I am using the wrong `CancellationToken`.
+
+-   I suspect, that `RoutingService.Navigate` needs to run on the UI thread for some reason.
+
+-   I suspect, that this got something to do with the `ContentControl`.
+
+### Result
+
+-   This was caused by the following line in `PageSearch.xaml.cs`:
+    ```csharp
+    DataContext = App.Current.Services.GetRequiredService<PageSearchViewModel>();
+    ```
