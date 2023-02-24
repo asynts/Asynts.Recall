@@ -11,6 +11,7 @@ using Asynts.Recall.Backend.Services;
 using CommunityToolkit.Mvvm.Input;
 using System.Threading;
 using System.Windows.Threading;
+using Microsoft.Extensions.Logging;
 
 namespace Asynts.Recall.Frontend.ViewModels;
 
@@ -21,28 +22,28 @@ public partial class PageSearchViewModel : ObservableObject
     private readonly IServiceProvider _serviceProvider;
     private readonly ISearchService _searchService;
     private readonly IRoutingService _routingService;
-    private readonly Dispatcher _dispatcher;
+    private readonly ILogger _logger;
 
     public PageSearchViewModel(
         IServiceProvider serviceProvider,
         ISearchService searchService,
         ObjectIDGenerator idGenerator,
         IRoutingService routingService,
-        Dispatcher dispatcher)
+        ILogger<PageSearchViewModel> logger)
     {
         DebugId = idGenerator.GetId(this, out _);
 
         _serviceProvider = serviceProvider;
         _searchService = searchService;
         _routingService = routingService;
-        _dispatcher = dispatcher;
+        _logger = logger;
 
         _routingService.RouteChangedEvent += _routingService_RouteChangedEvent;
     }
 
     private void _routingService_RouteChangedEvent(object sender, RouteChangedEventArgs eventArgs)
     {
-        Debug.WriteLine($"[PageSearchViewModel._routingService_RouteChangedEvent] route={eventArgs.Route}");
+        _logger.LogDebug($"[_routingService_RouteChangedEvent] route={eventArgs.Route}");
 
         if (eventArgs.Route is PageSearchRouteData route)
         {
@@ -57,7 +58,7 @@ public partial class PageSearchViewModel : ObservableObject
         // Clear the search results before doing any asynchronous operation.
         LoadPages(new List<PageData>());
 
-        Debug.WriteLine($"[PageSearchViewModel.SetSearchQuery]: cancelling existing request");
+        _logger.LogDebug($"[SetSearchQuery]: cancelling existing request");
 
         // Cancel any previous request.
         // This can happen in parallel since the backend will ensure that 'OperationCancelledException' is thrown.
@@ -69,11 +70,11 @@ public partial class PageSearchViewModel : ObservableObject
         try
         {
             pages = await _searchService.SearchAsync(searchQuery, searchServiceCancellationSource.Token);
-            Debug.WriteLine($"[PageSearchViewModel.SetSearchQuery]: got result");
+            _logger.LogDebug($"[SetSearchQuery]: got result");
         }
         catch (OperationCanceledException)
         {
-            Debug.WriteLine($"[PageSearchViewModel.SetSearchQuery]: aborted");
+            _logger.LogDebug($"[SetSearchQuery]: aborted");
             return;
         }
 

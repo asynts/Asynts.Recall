@@ -4,18 +4,21 @@ using System.Linq;
 using System.Windows.Threading;
 
 using Asynts.Recall.Backend.Persistance.Data;
+using Microsoft.Extensions.Logging;
 
 namespace Asynts.Recall.Backend.Services;
 
 public class RoutingService : IRoutingService
 {
     private readonly Dispatcher _dispatcher;
+    private readonly ILogger _logger;
 
     private IList<RouteData> locations = new List<RouteData>();
 
-    public RoutingService(Dispatcher dispatcher)
+    public RoutingService(Dispatcher dispatcher, ILogger<RoutingService> logger)
     {
         _dispatcher = dispatcher;
+        _logger = logger;
     }
 
     public RouteData Route => locations.Last();
@@ -48,7 +51,7 @@ public class RoutingService : IRoutingService
 
     public void Navigate(RouteData location)
     {
-        Debug.WriteLine($"[RoutingService.Navigate] location={location}");
+        _logger.LogDebug($"[Navigate] location={location}");
 
         locations.Add(location);
 

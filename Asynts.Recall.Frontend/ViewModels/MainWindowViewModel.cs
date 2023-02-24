@@ -3,6 +3,7 @@ using Asynts.Recall.Backend.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,11 +16,13 @@ public partial class MainWindowViewModel : ObservableObject
 {
     private readonly IRoutingService _routingService;
     private readonly IServiceProvider _serviceProvider;
+    private readonly ILogger _logger;
 
-    public MainWindowViewModel(IRoutingService routingService, IServiceProvider serviceProvider)
+    public MainWindowViewModel(IRoutingService routingService, IServiceProvider serviceProvider, ILogger<MainWindowViewModel> logger)
     {
         _routingService = routingService;
         _serviceProvider = serviceProvider;
+        _logger = logger;
 
         _routingService.RouteChangedEvent += _routingService_RouteChangedEvent;
 
@@ -33,7 +36,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     private void _routingService_RouteChangedEvent(object sender, RouteChangedEventArgs eventArgs)
     {
-        Debug.WriteLine($"[MainWindowViewModel._routingService_RouteChangedEvent] route={eventArgs.Route}");
+        _logger.LogDebug($"[_routingService_RouteChangedEvent] route={eventArgs.Route}");
 
         if (eventArgs.Route is PageSearchRouteData pageSearchRoute)
         {
