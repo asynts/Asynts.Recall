@@ -13,7 +13,7 @@
     <ItemsControl ItemsSource="{Binding Path=Pages}" Padding="2px">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <local:Page DataContext="{Binding}" Margin="2px" />
+                <local:Page DataContext="{Binding}" Margin="2px" ShowDetails="False" />
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>

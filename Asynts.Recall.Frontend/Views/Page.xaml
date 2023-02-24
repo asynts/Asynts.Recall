@@ -13,6 +13,7 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -22,5 +23,14 @@
         <Label Content="{Binding Path=Title}" Grid.Row="0" Grid.Column="0" FontSize="16pt" />
         <local:TagList DataContext="{Binding Path=Tags}" Grid.Row="1" Grid.Column="0" />
         <Label Content="{Binding Path=Contents}" Grid.Row="2" Grid.Column="0" Background="Green" />
+        <Label
+            Grid.Row="3"
+            Grid.Column="0"
+            Background="Orange"
+            Content="{Binding Path=Details}"
+            Visibility="{Binding
+                Path=ShowDetails,
+                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:Page}},
+                Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>

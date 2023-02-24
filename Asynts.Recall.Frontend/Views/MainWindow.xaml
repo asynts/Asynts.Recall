@@ -14,7 +14,7 @@
             <local:PageSearch DataContext="{Binding}" />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewmodel:PageViewModel}">
-            <local:PageDetails DataContext="{Binding}" Padding="4px" />
+            <local:Page DataContext="{Binding}" Padding="4px" ShowDetails="True" />
         </DataTemplate>
     </Window.Resources>
 

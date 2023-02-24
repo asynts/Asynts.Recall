@@ -22,6 +22,18 @@ namespace Asynts.Recall.Frontend.Views
             InitializeComponent();
         }
 
+        public bool ShowDetails
+        {
+            get => (bool)GetValue(ShowDetailsProperty);
+            set => SetValue(ShowDetailsProperty, value);
+        }
+
+        public static readonly DependencyProperty ShowDetailsProperty = DependencyProperty.Register(
+            name: nameof(ShowDetails),
+            propertyType: typeof(bool),
+            ownerType: typeof(Page)
+        );
+
         private void Grid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs eventArgs)
         {
             ViewModel.ShowDetailsPage();

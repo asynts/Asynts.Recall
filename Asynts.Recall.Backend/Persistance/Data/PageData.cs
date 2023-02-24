@@ -7,5 +7,6 @@ public record PageData
     public required long Id { get; set; }
     public required string Title { get; set; }
     public required string Contents { get; set; }
+    public string? Details { get; set; }
     public required IList<string> Tags { get; set; }
 }

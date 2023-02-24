@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using Asynts.Recall.Backend.Services;
 using Asynts.Recall.Backend.Persistance.Data;
 using Asynts.Recall.Backend.Persistance;
+using System.Windows;
 
 namespace Asynts.Recall.Frontend.ViewModels
 {
@@ -25,6 +26,7 @@ namespace Asynts.Recall.Frontend.ViewModels
             Title = pageData.Title;
             Contents = pageData.Contents;
             Tags = pageData.Tags;
+            Details = pageData.Details;
 
             DebugId = idGenerator.GetId(this, out _);
         }
@@ -37,6 +39,9 @@ namespace Asynts.Recall.Frontend.ViewModels
 
         [ObservableProperty]
         private string contents = "Contents";
+
+        [ObservableProperty]
+        private string? details = "Details";
 
         [ObservableProperty]
         private IList<string> tags = new List<string> { "tag_1", "tag_2", "tag_3" };
