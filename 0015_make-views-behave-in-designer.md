@@ -35,6 +35,11 @@
 
 -   I was able to get this working by providing a default constructor in `PageViewModel`.
 
+-   The problem is that in some instances I use `ActivatorUtilities.CreateInstance` which doesn't seem to like the default constructors that I am providing
+    in the views.
+
+    -   I created a `PageViewModelFactory` which is created using depencency injection instead.
+
 ### Theories
 
 -	I suspect, that I need to provide a default constructor in the view model.

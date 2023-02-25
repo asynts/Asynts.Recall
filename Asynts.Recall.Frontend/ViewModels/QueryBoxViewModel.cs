@@ -14,9 +14,20 @@ public partial class QueryBoxViewModel : ObservableObject
 {
     private readonly IRoutingService _routingService;
 
+    public QueryBoxViewModel()
+    {
+        _routingService = null!;
+
+        query = string.Empty;
+        rawQuery = string.Empty;
+    }
+
     public QueryBoxViewModel(IRoutingService routingService)
     {
         _routingService = routingService;
+
+        query = string.Empty;
+        rawQuery = string.Empty;
 
         _routingService.RouteChangedEvent += _routingService_RouteChangedEvent;
     }
@@ -28,10 +39,10 @@ public partial class QueryBoxViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private string query = string.Empty;
+    private string query;
 
     [ObservableProperty]
-    private string rawQuery = string.Empty;
+    private string rawQuery;
 
     [RelayCommand]
     public void SubmitQuery()

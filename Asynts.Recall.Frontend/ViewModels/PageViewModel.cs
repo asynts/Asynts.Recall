@@ -9,6 +9,24 @@ using System.Windows;
 
 namespace Asynts.Recall.Frontend.ViewModels
 {
+    public class PageViewModelFactory
+    {
+        private readonly IRoutingService _routingService;
+
+        public PageViewModelFactory(IRoutingService routingService)
+        {
+            this._routingService = routingService;
+        }
+
+        public PageViewModel Create(PageData pageData)
+        {
+            return new PageViewModel(
+                routingService: _routingService,
+                pageData: pageData
+            );
+        }
+    }
+
     public partial class PageViewModel : ObservableObject
     {
         private readonly IRoutingService _routingService;
@@ -25,9 +43,20 @@ namespace Asynts.Recall.Frontend.ViewModels
             tags = new List<string> { "tag/1/", "tag/2/", "tag/3/" };
         }
 
+        // For designer only
+        public PageViewModel(PageData pageData)
+        {
+            _routingService = null!;
+
+            id = pageData.Id;
+            title = pageData.Title;
+            contents = pageData.Contents;
+            tags = pageData.Tags;
+            details = pageData.Details;
+        }
+
         public PageViewModel(
             PageData pageData,
-            ObjectIDGenerator idGenerator,
             IRoutingService routingService)
         {
             _routingService = routingService;

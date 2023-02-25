@@ -19,17 +19,21 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger _logger;
     private readonly IPageRepository _pageRepository;
+    private readonly PageViewModelFactory _pageViewModelFactory;
 
     public MainWindowViewModel(
         IRoutingService routingService,
         IServiceProvider serviceProvider,
         ILogger<MainWindowViewModel> logger,
-        IPageRepository pageRepository)
+        IPageRepository pageRepository,
+        PageViewModelFactory pageViewModelFactory)
     {
         _routingService = routingService;
         _serviceProvider = serviceProvider;
         _logger = logger;
         _pageRepository = pageRepository;
+        _pageViewModelFactory = pageViewModelFactory;
+
         _routingService.RouteChangedEvent += _routingService_RouteChangedEvent;
 
         _routingService.Navigate(new PageSearchRouteData
@@ -54,7 +58,7 @@ public partial class MainWindowViewModel : ObservableObject
         else if (eventArgs.Route is PageDetailsRouteData pageDetailsRoute)
         {
             var pageData = _pageRepository.GetById(pageDetailsRoute.PageId);
-            var pageVM = ActivatorUtilities.CreateInstance<PageViewModel>(_serviceProvider, pageData);
+            var pageVM = _pageViewModelFactory.Create(pageData);
 
             CurrentViewModel = pageVM;
         }
