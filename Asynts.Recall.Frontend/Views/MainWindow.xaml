@@ -33,6 +33,9 @@
                 <ContentControl.Content>
                     <Binding Path="CurrentViewModel" />
                 </ContentControl.Content>
+                <d:ContentControl.Content>
+                    <viewmodel:PageSearchViewModel />
+                </d:ContentControl.Content>
             </ContentControl>
         </StackPanel>
     </DockPanel>

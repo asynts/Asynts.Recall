@@ -50,4 +50,30 @@
 -   Somehow it seems that `ShowDetails` defaults to `True` and thus I was able to simply remove the `d:Visibility` and use the default.
     That allowed the parent element to update it.
 
+-   I got another problem with the `QueryBox` model.
+
+    -   We use dependency injection to create the view model:
+        ```csharp
+        DataContext = App.Current.Services.GetRequiredService<QueryBoxViewModel>();
+        ```
+
+    -   It seems that the designer uses a different `Application` instance and thus this cast does not work:
+
+        ```none
+        XDG0003	Unable to cast object of type 'Microsoft.VisualStudio.XSurface.Wpf.WpfSurfaceApp' to type 'Asynts.Recall.Frontend.Views.App'.
+        ```
+
+    -   The solution was to add a check, if we are executing in design mode or not:
+
+        ```none
+        if (DesignerProperties.GetIsInDesignMode(this))
+        {
+            DataContext = new QueryBoxViewModel();
+        }
+        else
+        {
+            DataContext = App.Current.Services.GetRequiredService<QueryBoxViewModel>();
+        }
+        ```
+
 ### Theories
