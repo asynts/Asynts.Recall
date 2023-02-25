@@ -6,10 +6,9 @@
              xmlns:local="clr-namespace:Asynts.Recall.Frontend.Views"
              xmlns:viewmodel="clr-namespace:Asynts.Recall.Frontend.ViewModels"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignWidth="600"
-             d:DataContext="{d:DesignInstance Type=viewmodel:PageViewModel}">
+             d:DataContext="{d:DesignInstance Type=viewmodel:PageViewModel, IsDesignTimeCreatable=True}">
     <Grid Background="Blue">
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="MouseDown">
@@ -28,26 +27,14 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Grid.Resources>
-            <sys:String x:Key="DesignTimeTitle">Title</sys:String>
-            <sys:String x:Key="DesignTimeContents">Contents</sys:String>
-            <sys:String x:Key="DesignTimeDetails">Details</sys:String>
-            <x:Array x:Key="DesignTimeTags" Type="sys:String">
-                <sys:String>tag_1</sys:String>
-                <sys:String>tag_2</sys:String>
-                <sys:String>tag_3</sys:String>
-            </x:Array>
-        </Grid.Resources>
-
-        <Label Content="{Binding Path=Title}" d:Content="{StaticResource DesignTimeTitle}" Grid.Row="0" Grid.Column="0" FontSize="16pt" />
-        <local:TagList DataContext="{Binding Path=Tags}" d:DataContext="{StaticResource DesignTimeTags}" Grid.Row="1" Grid.Column="0" />
-        <Label Content="{Binding Path=Contents}" d:Content="{StaticResource DesignTimeContents}" Grid.Row="2" Grid.Column="0" Background="Green" />
+        <Label Content="{Binding Path=Title}" Grid.Row="0" Grid.Column="0" FontSize="16pt" />
+        <local:TagList DataContext="{Binding Path=Tags}" Grid.Row="1" Grid.Column="0" />
+        <Label Content="{Binding Path=Contents}" Grid.Row="2" Grid.Column="0" Background="Green" />
         <Label
             Grid.Row="3"
             Grid.Column="0"
             Background="Orange"
             Content="{Binding Path=Details}"
-            d:Content="{StaticResource DesignTimeDetails}"
             Visibility="{Binding
                 Path=ShowDetails,
                 RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:Page}},

@@ -11,9 +11,19 @@ namespace Asynts.Recall.Frontend.ViewModels
 {
     public partial class PageViewModel : ObservableObject
     {
-        public long DebugId { get; private set; }
-
         private readonly IRoutingService _routingService;
+
+        // For designer only.
+        public PageViewModel()
+        {
+            _routingService = null!;
+
+            id = 0;
+            title = "Title";
+            contents = "Contents";
+            details = "Details";
+            tags = new List<string> { "tag/1/", "tag/2/", "tag/3/" };
+        }
 
         public PageViewModel(
             PageData pageData,
@@ -22,29 +32,27 @@ namespace Asynts.Recall.Frontend.ViewModels
         {
             _routingService = routingService;
 
-            Id = pageData.Id;
-            Title = pageData.Title;
-            Contents = pageData.Contents;
-            Tags = pageData.Tags;
-            Details = pageData.Details;
-
-            DebugId = idGenerator.GetId(this, out _);
+            id = pageData.Id;
+            title = pageData.Title;
+            contents = pageData.Contents;
+            tags = pageData.Tags;
+            details = pageData.Details;
         }
 
         [ObservableProperty]
-        private long id = 0;
+        private long id;
 
         [ObservableProperty]
-        private string title = "Title";
+        private string title;
 
         [ObservableProperty]
-        private string contents = "Contents";
+        private string contents;
 
         [ObservableProperty]
-        private string? details = "Details";
+        private string? details;
 
         [ObservableProperty]
-        private IList<string> tags = new List<string> { "tag_1", "tag_2", "tag_3" };
+        private IList<string> tags;
 
         [RelayCommand]
         public void ShowDetailsPage()

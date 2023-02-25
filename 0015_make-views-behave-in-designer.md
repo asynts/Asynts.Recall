@@ -33,6 +33,8 @@
     </Grid>
 	```
 
+-   I was able to get this working by providing a default constructor in `PageViewModel`.
+
 ### Theories
 
 -	I suspect, that I need to provide a default constructor in the view model.
