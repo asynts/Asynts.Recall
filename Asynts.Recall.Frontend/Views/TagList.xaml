@@ -4,9 +4,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Asynts.Recall.Frontend.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d"
+             d:DesignWidth="600"
+             d:Background="Blue">
     <ItemsControl ItemsSource="{Binding .}" Grid.Row="1" Grid.Column="0" Margin="2px">
+        <d:ItemsControl.ItemsSource>
+            <x:Array Type="{x:Type sys:String}">
+                <sys:String>/tag/1/</sys:String>
+                <sys:String>/tag/2/</sys:String>
+                <sys:String>/tag/3/</sys:String>
+            </x:Array>
+        </d:ItemsControl.ItemsSource>
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <StackPanel Orientation="Horizontal" />
