@@ -58,9 +58,11 @@ namespace Asynts.Recall.Frontend.Views
 
             services.AddSingleton<ObjectIDGenerator>();
 
+            services.AddTransient<PageParserServiceFactory>();
+            services.AddTransient<PageViewModelFactory>();
+
             services.AddTransient<PageSearchViewModel>();
             services.AddTransient<QueryBoxViewModel>();
-            services.AddTransient<PageViewModelFactory>();
             services.AddTransient<MainWindowViewModel>();
 
             return services.BuildServiceProvider();
