@@ -38,7 +38,7 @@ namespace Asynts.Recall.Frontend.ViewModels
 
             id = 0;
             title = "Title";
-            contents = "Contents";
+            summary = "Summary";
             details = "Details";
             tags = new List<string> { "tag/1/", "tag/2/", "tag/3/" };
         }
@@ -50,7 +50,7 @@ namespace Asynts.Recall.Frontend.ViewModels
 
             id = pageData.Id;
             title = pageData.Title;
-            contents = pageData.Contents;
+            summary = pageData.Summary;
             tags = pageData.Tags;
             details = pageData.Details;
         }
@@ -63,7 +63,7 @@ namespace Asynts.Recall.Frontend.ViewModels
 
             id = pageData.Id;
             title = pageData.Title;
-            contents = pageData.Contents;
+            summary = pageData.Summary;
             tags = pageData.Tags;
             details = pageData.Details;
         }
@@ -75,7 +75,7 @@ namespace Asynts.Recall.Frontend.ViewModels
         private string title;
 
         [ObservableProperty]
-        private string contents;
+        private string summary;
 
         [ObservableProperty]
         private string? details;

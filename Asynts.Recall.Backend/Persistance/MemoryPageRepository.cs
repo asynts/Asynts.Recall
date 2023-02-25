@@ -36,7 +36,7 @@ public class MemoryPageRepository : IPageRepository
         {
             Id = 0,
             Title = "Hello, world!",
-            Contents = "Hello to everyone!\nThis is an example.",
+            Summary = "Hello to everyone!\nThis is an example.",
             Details = null,
             Tags = new List<string>
             {
@@ -48,7 +48,7 @@ public class MemoryPageRepository : IPageRepository
         {
             Id = 1,
             Title = "Another Example",
-            Contents = "This is another example.",
+            Summary = "This is another example.",
             Details = "Here are some details:\n 1. Detail 1\n 2. Detail 2",
             Tags = new List<string>
             {

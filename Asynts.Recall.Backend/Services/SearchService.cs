@@ -33,27 +33,27 @@ public class SearchService : ISearchService
             .OrderByDescending(page => ScoreSearchResult(query, page));
     }
 
-    private float ScoreSearchResult(PageSearchRouteData query, PageData content)
+    private float ScoreSearchResult(PageSearchRouteData query, PageData pageData)
     {
         float score = 0;
 
         foreach (var interestingTerm in query.InterestingTerms)
         {
-            if (content.Title.Contains(interestingTerm, StringComparison.InvariantCultureIgnoreCase))
+            if (pageData.Title.Contains(interestingTerm, StringComparison.InvariantCultureIgnoreCase))
             {
                 score += 2;
             }
-            if (content.Contents.Contains(interestingTerm, StringComparison.InvariantCultureIgnoreCase))
+            if (pageData.Summary.Contains(interestingTerm, StringComparison.InvariantCultureIgnoreCase))
             {
                 score += 1;
             }
         }
 
-        if (content.Title.Contains(query.RawText, StringComparison.InvariantCulture))
+        if (pageData.Title.Contains(query.RawText, StringComparison.InvariantCulture))
         {
             score += 20;
         }
-        if (content.Contents.Contains(query.RawText, StringComparison.InvariantCulture))
+        if (pageData.Summary.Contains(query.RawText, StringComparison.InvariantCulture))
         {
             score += 10;
         }

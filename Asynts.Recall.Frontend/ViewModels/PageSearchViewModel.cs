@@ -36,7 +36,7 @@ public partial class PageSearchViewModel : ObservableObject
             {
                 Id = 1,
                 Title = "Title (Page #1)",
-                Contents = "Contents (Page #1)",
+                Summary = "Summary (Page #1)",
                 Details = "Details (Page #1)",
                 Tags = new List<string> { "example/1/", "hello/" },
             },
@@ -44,7 +44,7 @@ public partial class PageSearchViewModel : ObservableObject
             {
                 Id = 2,
                 Title = "Title (Page #2)",
-                Contents = "Contents (Page #2)",
+                Summary = "Summary (Page #2)",
                 Details = "Details (Page #2)",
                 Tags = new List<string> { "example/2/", "hello/" },
             },
@@ -52,7 +52,7 @@ public partial class PageSearchViewModel : ObservableObject
             {
                 Id = 3,
                 Title = "Title (Page #3)",
-                Contents = "Contents (Page #3)",
+                Summary = "Summary (Page #3)",
                 Details = "Details (Page #3)",
                 Tags = new List<string> { "example/3/", "hello/" },
             },
