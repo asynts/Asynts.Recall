@@ -9,14 +9,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}">
-    <Window.Resources>
-        <DataTemplate DataType="{x:Type viewmodel:PageSearchViewModel}">
-            <local:PageSearch DataContext="{Binding}" />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewmodel:PageViewModel}">
-            <local:Page DataContext="{Binding}" Padding="4px" ShowDetails="True" />
-        </DataTemplate>
-    </Window.Resources>
 
     <DockPanel>
         <Menu DockPanel.Dock="Top">
@@ -29,7 +21,19 @@
 
             <Separator Background="Black" Margin="0" />
 
-            <ContentControl Content="{Binding CurrentViewModel}" />
+            <ContentControl>
+                <ContentControl.Resources>
+                    <DataTemplate DataType="{x:Type viewmodel:PageSearchViewModel}">
+                        <local:PageSearch DataContext="{Binding}" />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodel:PageViewModel}">
+                        <local:Page DataContext="{Binding}" Padding="4px" ShowDetails="True" />
+                    </DataTemplate>
+                </ContentControl.Resources>
+                <ContentControl.Content>
+                    <Binding Path="CurrentViewModel" />
+                </ContentControl.Content>
+            </ContentControl>
         </StackPanel>
     </DockPanel>
 </Window>
