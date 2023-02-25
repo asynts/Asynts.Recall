@@ -23,7 +23,24 @@
 -   I think the key is to understand how routed events work:
     https://learn.microsoft.com/en-us/dotnet/desktop/wpf/events/routed-events-overview?view=netdesktop-7.0
 
+-   It seems that it's not trivial to connect a command to an event:
+    https://stackoverflow.com/a/7756809/8746648
+
+-   This explains how to set this up properly with the new "behaviours":
+    https://stackoverflow.com/a/61547718/8746648
+
 ### Tasks
 
 -   Research routed events:
     https://learn.microsoft.com/en-us/dotnet/desktop/wpf/events/routed-events-overview?view=netdesktop-7.0
+
+### Result
+
+-   I am using `xmlns:i="http://schemas.microsoft.com/xaml/behaviors"` with the following:
+    ```xaml
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="MouseDown">
+            <i:InvokeCommandAction Command="{Binding ShowDetailsPageCommand}" />
+        </i:EventTrigger>    
+    </i:Interaction.Triggers>
+    ```
