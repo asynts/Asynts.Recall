@@ -38,7 +38,6 @@
             Visibility="{Binding
                 Path=ShowDetails,
                 RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:Page}},
-                Converter={StaticResource BooleanToVisibilityConverter}}"
-            d:Visibility="Visible" />
+                Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>

@@ -40,6 +40,14 @@
 
     -   I created a `PageViewModelFactory` which is created using depencency injection instead.
 
-### Theories
+-   I got another problem with the `PageViewModel`.
+    Sometimes I want to show the details and sometimes I want to hide them:
 
--	I suspect, that I need to provide a default constructor in the view model.
+    -   When viewing the designer of `Page` I want to see the details.
+
+    -   When viewing the designer of `PageSearch` I want to hide the details and pass `ShowDetails=False` which is ignored.
+
+-   Somehow it seems that `ShowDetails` defaults to `True` and thus I was able to simply remove the `d:Visibility` and use the default.
+    That allowed the parent element to update it.
+
+### Theories
