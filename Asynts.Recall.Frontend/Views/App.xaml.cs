@@ -55,9 +55,9 @@ namespace Asynts.Recall.Frontend.Views
 
             services.AddSingleton<ISearchService, SearchService>();
             services.AddSingleton<IRoutingService, RoutingService>();
+            services.AddTransient<IPageParseService, PageParserService>();
 
             services.AddSingleton<ObjectIDGenerator>();
-            services.AddTransient<PageParserService>();
 
             services.AddTransient<PageViewModelFactory>();
             services.AddTransient<PageSearchViewModel>();

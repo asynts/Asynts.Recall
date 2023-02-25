@@ -1,24 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Asynts.Recall.Backend.Persistance.Data;
 
 namespace Asynts.Recall.Backend.Services;
-
-public class ParserException : FormatException
-{
-    public ParserException(int line, int column, string rawMessage)
-        : base($"{line}:{column}: {rawMessage}")
-    {
-        Line = line;
-        Column = column;
-        RawMessage = rawMessage;
-    }
-
-    public int Line { get; private set; }
-    public int Column { get; private set; }
-    public string RawMessage { get; private set; }
-}
 
 /// <summary>
 /// Parses <see cref="PageData" /> objects from string.
@@ -30,6 +16,7 @@ public class ParserException : FormatException
 /// <item>Some sections are optional but none may appear more than once.</item>
 /// <item>The marker can only occur at the start of a line.</item>
 /// <item>There must not be any whitespace before the first marker.</item>
+/// <item>The section names are case sensitive.</item>
 /// </list>
 /// </para>
 /// <para>
@@ -73,11 +60,45 @@ public class ParserException : FormatException
 /// This can be very long and is only shown when an individual page is viewed.
 /// </code>
 /// </example>
-public class PageParserService
+public class PageParserService : IPageParseService
 {
     public PageParserService()
     {
 
+    }
+
+    public PageData Parse(string input)
+    {
+        var sections = ParseIntoSections(input);
+        VerifySections(sections);
+        return ExtractDataFromSections(sections);
+    }
+
+    private PageData ExtractDataFromSections(IDictionary<string, SectionInfo> sections)
+    {
+        // FIXME
+        throw new NotImplementedException();
+    }
+
+    private void VerifySections(IDictionary<string, SectionInfo> sections)
+    {
+        var requiredSectionNames = new string[] { "Metadata", "Summary" };
+        foreach (var requiredSectionName in requiredSectionNames)
+        {
+            if (!sections.ContainsKey(requiredSectionName))
+            {
+                throw new ParserException(1, $"missing required section '{requiredSectionName}'");
+            }
+        }
+
+        var allowedSectionNames = new string[] { "Metadata", "Comment", "Summary", "Details" };
+        foreach (var kvp in sections)
+        {
+            if (!allowedSectionNames.Contains(kvp.Key))
+            {
+                throw new ParserException(kvp.Value.Line, $"unknown section '{kvp.Key}'");
+            }
+        }
     }
 
     private record SectionInfo
@@ -132,7 +153,7 @@ public class PageParserService
                 switch (state)
                 {
                     case ParserState.Initial:
-                        throw new ParserException(line.Line, 1, "expected initial marker");
+                        throw new ParserException(line.Line, "expected initial marker");
                     case ParserState.InsideContent:
                         currentSectionContent += line.Text;
                         break;
@@ -142,7 +163,7 @@ public class PageParserService
 
         if (state == ParserState.Initial)
         {
-            throw new ParserException(1, 1, "expected intial marker");
+            throw new ParserException(1, "expected intial marker");
         }
 
         var successful_2 = sections.TryAdd(
