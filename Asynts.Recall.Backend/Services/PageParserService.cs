@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Asynts.Recall.Backend.Persistance.Data;
 using Microsoft.Extensions.Logging;
@@ -236,13 +237,27 @@ public class PageParserService : IPageParserService
     private record LineInfo
     {
         public required int Line { get; init; }
-        public required int Offset { get; init; }
         public required string Text { get; init; }
     }
     private IEnumerable<LineInfo> EnumerateLines(string input)
     {
-        // FIXME
-        throw new NotImplementedException();
+        using (var reader = new StringReader(input))
+        {
+            int line = 1;
+
+            while (true)
+            {
+                var text = reader.ReadLine();
+                if (text == null)
+                {
+                    yield break;
+                }
+
+                yield return new LineInfo { Line = line, Text = text };
+
+                line += 1;
+            }
+        }
     }
 
     private record SectionHeaderInfo
