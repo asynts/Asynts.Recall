@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Asynts.Recall.Backend.Persistance.Data;
+using Asynts.Recall.Backend.Utility;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -175,11 +176,16 @@ public class PageParserService : IPageParserService
         string? currentSectionName = null;
         string? currentSectionContent = null;
 
-        foreach (var line in EnumerateLines(input))
+        foreach (var lineInfo in EnumerateLines(input))
         {
-            if (line.Text.StartsWith("---"))
+            if (lineInfo.Text.StartsWith("---"))
             {
-                var nextSection = ParseSectionHeader(line: line, existingSections: sections);
+                var nextSectionHeaderInfo = ParseSectionHeader(lineInfo);
+
+                if (sections.ContainsKey(nextSectionHeaderInfo.Name))
+                {
+                    throw new ParserException(lineInfo.Line, $"section '{nextSectionHeaderInfo.Name}' already defined");
+                }
 
                 switch (state)
                 {
@@ -198,9 +204,9 @@ public class PageParserService : IPageParserService
                         break;
                 }
 
-                currentSectionName = nextSection.Name;
+                currentSectionName = nextSectionHeaderInfo.Name;
                 currentSectionContent = "";
-                currentSectionHeaderLine = line;
+                currentSectionHeaderLine = lineInfo;
                 state = ParserState.InsideContent;
             }
             else
@@ -208,9 +214,9 @@ public class PageParserService : IPageParserService
                 switch (state)
                 {
                     case ParserState.Initial:
-                        throw new ParserException(line.Line, "expected initial marker");
+                        throw new ParserException(lineInfo.Line, "expected initial marker");
                     case ParserState.InsideContent:
-                        currentSectionContent += line.Text;
+                        currentSectionContent += lineInfo.Text;
                         break;
                 }
             }
@@ -264,9 +270,21 @@ public class PageParserService : IPageParserService
     {
         public required string Name { get; init; }
     }
-    private SectionHeaderInfo ParseSectionHeader(LineInfo line, IDictionary<string, SectionInfo> existingSections)
+    private SectionHeaderInfo ParseSectionHeader(LineInfo lineInfo)
     {
-        // FIXME
-        throw new NotImplementedException();
+        var lexer = new Lexer(lineInfo.Text);
+
+        var successful_1 = lexer.TryConsumeString("---");
+        Debug.Assert(successful_1);
+
+        lexer.ConsumeInlineWhitespace();
+
+        string? sectionName = lexer.ConsumeRegex(@"^[a-zA-Z-]+");
+        if (sectionName == null)
+        {
+            throw new ParserException(lineInfo.Line, "expected section name after '---' marker");
+        }
+
+        return new SectionHeaderInfo { Name = sectionName };
     }
 }
