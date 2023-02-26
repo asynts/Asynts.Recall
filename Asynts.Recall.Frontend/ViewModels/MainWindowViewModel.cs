@@ -57,7 +57,7 @@ public partial class MainWindowViewModel : ObservableObject
         }
         else if (eventArgs.Route is PageDetailsRouteData pageDetailsRoute)
         {
-            var pageData = _pageRepository.GetById(pageDetailsRoute.PageId);
+            var pageData = _pageRepository.GetByUuid(pageDetailsRoute.PageUuid);
             var pageVM = _pageViewModelFactory.Create(pageData);
 
             CurrentViewModel = pageVM;

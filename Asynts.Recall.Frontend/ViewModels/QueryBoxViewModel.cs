@@ -61,11 +61,8 @@ public partial class QueryBoxViewModel : ObservableObject
         {
             if (queryPart.StartsWith("#"))
             {
-                long postId;
-                if (long.TryParse(queryPart.Substring(1), out postId))
-                {
-                    return new PageDetailsRouteData { PageId = postId };
-                }
+                string pageUuid = queryPart.Substring(1);
+                return new PageDetailsRouteData { PageUuid = pageUuid };
             }
             else if (queryPart.StartsWith('[') && queryPart.EndsWith(']')) {
                 requiredTags.Add(queryPart.Substring(1, queryPart.Length - 2));

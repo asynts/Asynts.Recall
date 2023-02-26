@@ -69,22 +69,19 @@ namespace Asynts.Recall.Backend.Services;
 /// </example>
 public class PageParserService : IPageParserService
 {
-    private readonly ILogger _logger;
     private readonly JSchema _metadataSchema;
 
-    public PageParserService(ILogger<PageParserService> logger)
+    public PageParserService()
     {
-        _logger = logger;
-
         _metadataSchema = JSchema.Parse("""
         {
             "type": "object",
             "properties": {
-                "id": { "type": "integer" },
-                "title": { "type": "string" ] },
+                "id": { "type": "string" },
+                "title": { "type": "string" },
                 "tags": {
-                    "type": [ "array" ],
-                    "items": { "type": [ "string" ] }
+                    "type": "array",
+                    "items": { "type": "string" }
                 }
             },
             "required": [
@@ -105,18 +102,7 @@ public class PageParserService : IPageParserService
 
     private PageData ExtractDataFromSections(IDictionary<string, SectionInfo> sections)
     {
-        JObject metadata;
-        try
-        {
-            metadata = JObject.Parse(sections["Metadata"].Content);
-        } catch (JsonReaderException)
-        {
-            throw new ParserException(sections["Metadata"].Line, "failed to parse metadata");
-        }
-        if (!metadata.IsValid(_metadataSchema))
-        {
-            throw new ParserException(sections["Metadata"].Line, "failed to validate metadata");
-        }
+        var metadata = ExtractMetadataFromSection(sections["Metadata"]);
 
         string summary = sections["Summary"].Content;
 
@@ -128,12 +114,48 @@ public class PageParserService : IPageParserService
 
         return new PageData
         {
-            Id = metadata.Value<long>("id"),
-            Title = metadata.Value<string>("title")!,
+            Uuid = metadata.Id,
+            Title = metadata.Title,
             Summary = summary,
             Details = details,
-            Tags = metadata.Value<List<string>>("tags")!,
+            Tags = metadata.Tags,
         };
+    }
+
+    private record MetadataInfo
+    {
+        [JsonProperty("id")]
+        public required string Id { get; init; }
+
+        [JsonProperty("title")]
+        public required string Title { get; init; }
+
+        [JsonProperty("tags")]
+        public required List<string> Tags { get; init; }
+    }
+    private MetadataInfo ExtractMetadataFromSection(SectionInfo sectionInfo)
+    {
+        Debug.Assert(sectionInfo.Name == "Metadata");
+
+        MetadataInfo? metadata = null;
+
+        using (var textReader = new StringReader(sectionInfo.Content))
+        using (var jsonReader = new JsonTextReader(textReader))
+        using (var validatingReader = new JSchemaValidatingReader(jsonReader))
+        {
+            validatingReader.Schema = _metadataSchema;
+
+            var serializer = new JsonSerializer();
+
+            metadata = serializer.Deserialize<MetadataInfo>(validatingReader);
+            //metadata = JsonConvert.DeserializeObject<MetadataInfo>(sectionInfo.Content);
+        }
+        if (metadata == null)
+        {
+            throw new ParserException(sectionInfo.Line, "failed to parse metadata");
+        }
+
+        return metadata;
     }
 
     private void VerifySections(IDictionary<string, SectionInfo> sections)
@@ -216,7 +238,7 @@ public class PageParserService : IPageParserService
                     case ParserState.Initial:
                         throw new ParserException(lineInfo.Line, "expected initial marker");
                     case ParserState.InsideContent:
-                        currentSectionContent += lineInfo.Text;
+                        currentSectionContent += lineInfo.Text + "\n";
                         break;
                 }
             }

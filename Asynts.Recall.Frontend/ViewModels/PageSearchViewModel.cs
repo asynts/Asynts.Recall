@@ -34,7 +34,7 @@ public partial class PageSearchViewModel : ObservableObject
         LoadPages(new List<PageData> {
             new PageData
             {
-                Id = 1,
+                Uuid = "06c65334-3bbc-4786-9970-1ceac5a0ef93",
                 Title = "Title (Page #1)",
                 Summary = "Summary (Page #1)",
                 Details = "Details (Page #1)",
@@ -42,7 +42,7 @@ public partial class PageSearchViewModel : ObservableObject
             },
             new PageData
             {
-                Id = 2,
+                Uuid = "93874dbd-e28a-45b8-ae00-cc97779427db",
                 Title = "Title (Page #2)",
                 Summary = "Summary (Page #2)",
                 Details = "Details (Page #2)",
@@ -50,7 +50,7 @@ public partial class PageSearchViewModel : ObservableObject
             },
             new PageData
             {
-                Id = 3,
+                Uuid = "5a9d022c-a83f-4a59-b910-570d215a7519",
                 Title = "Title (Page #3)",
                 Summary = "Summary (Page #3)",
                 Details = "Details (Page #3)",

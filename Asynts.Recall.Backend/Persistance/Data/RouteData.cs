@@ -10,11 +10,11 @@ public abstract record RouteData
 
 public record PageDetailsRouteData : RouteData
 {
-    public required long PageId { get; set; }
+    public required string PageUuid { get; set; }
 
     public override string NormalizedQuery()
     {
-        return $"#{PageId} ";
+        return $"#{PageUuid} ";
     }
     public override string RawQuery()
     {

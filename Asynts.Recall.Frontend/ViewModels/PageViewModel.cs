@@ -6,6 +6,7 @@ using Asynts.Recall.Backend.Services;
 using Asynts.Recall.Backend.Persistance.Data;
 using Asynts.Recall.Backend.Persistance;
 using System.Windows;
+using System;
 
 namespace Asynts.Recall.Frontend.ViewModels
 {
@@ -36,7 +37,7 @@ namespace Asynts.Recall.Frontend.ViewModels
         {
             _routingService = null!;
 
-            id = 0;
+            uuid = "e6e100e4-0f27-405d-87bf-d4852b675769";
             title = "Title";
             summary = "Summary";
             details = "Details";
@@ -48,7 +49,7 @@ namespace Asynts.Recall.Frontend.ViewModels
         {
             _routingService = null!;
 
-            id = pageData.Id;
+            uuid = pageData.Uuid;
             title = pageData.Title;
             summary = pageData.Summary;
             tags = pageData.Tags;
@@ -61,7 +62,7 @@ namespace Asynts.Recall.Frontend.ViewModels
         {
             _routingService = routingService;
 
-            id = pageData.Id;
+            uuid = pageData.Uuid;
             title = pageData.Title;
             summary = pageData.Summary;
             tags = pageData.Tags;
@@ -69,7 +70,7 @@ namespace Asynts.Recall.Frontend.ViewModels
         }
 
         [ObservableProperty]
-        private long id;
+        private string uuid;
 
         [ObservableProperty]
         private string title;
@@ -88,7 +89,7 @@ namespace Asynts.Recall.Frontend.ViewModels
         {
             _routingService.Navigate(new PageDetailsRouteData
             {
-                PageId = Id,
+                PageUuid = Uuid,
             });
         }
     }

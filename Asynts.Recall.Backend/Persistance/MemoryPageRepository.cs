@@ -7,11 +7,11 @@ namespace Asynts.Recall.Backend.Persistance;
 
 public class MemoryPageRepository : IPageRepository
 {
-    private Dictionary<long, PageData> pages = new Dictionary<long, PageData>();
+    private Dictionary<string, PageData> pages = new Dictionary<string, PageData>();
 
     public void Add(PageData page)
     {
-        var successful = pages.TryAdd(page.Id, page);
+        var successful = pages.TryAdd(page.Uuid, page);
         Debug.Assert(successful);
     }
 
@@ -20,9 +20,9 @@ public class MemoryPageRepository : IPageRepository
         return pages.Select(kvp => kvp.Value);
     }
 
-    public PageData GetById(long id)
+    public PageData GetByUuid(string uuid)
     {
-        var successful = pages.TryGetValue(id, out var page);
+        var successful = pages.TryGetValue(uuid, out var page);
         Debug.Assert(successful);
 
         return page!;
@@ -34,7 +34,7 @@ public class MemoryPageRepository : IPageRepository
 
         Add(new PageData
         {
-            Id = 0,
+            Uuid = "e6d61d1b-2ba2-4f22-a257-68b2d1d42b38",
             Title = "Hello, world!",
             Summary = "Hello to everyone!\nThis is an example.",
             Details = null,
@@ -46,7 +46,7 @@ public class MemoryPageRepository : IPageRepository
         });
         Add(new PageData
         {
-            Id = 1,
+            Uuid = "b52cb001-5cfa-4ace-8e4e-027329ce97d3",
             Title = "Another Example",
             Summary = "This is another example.",
             Details = "Here are some details:\n 1. Detail 1\n 2. Detail 2",
