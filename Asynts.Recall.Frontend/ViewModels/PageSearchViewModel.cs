@@ -12,6 +12,7 @@ using Asynts.Recall.Backend.Persistance.Data;
 using Asynts.Recall.Backend.Services;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Asynts.Recall.Backend.Persistance;
 
 namespace Asynts.Recall.Frontend.ViewModels;
 
@@ -22,6 +23,7 @@ public partial class PageSearchViewModel : ObservableObject
     private readonly IRoutingService _routingService;
     private readonly ILogger _logger;
     private readonly PageViewModelFactory _pageViewModelFactory;
+    private readonly IPageRepository _pageRepository;
 
     public PageSearchViewModel()
     {
@@ -30,6 +32,7 @@ public partial class PageSearchViewModel : ObservableObject
         _routingService = null!;
         _logger = null!;
         _pageViewModelFactory = null!;
+        _pageRepository = null!;
 
         LoadPages(new List<PageData> {
             new PageData
@@ -63,6 +66,7 @@ public partial class PageSearchViewModel : ObservableObject
         IServiceProvider serviceProvider,
         ISearchService searchService,
         IRoutingService routingService,
+        IPageRepository pageRepository,
         ILogger<PageSearchViewModel> logger,
         PageViewModelFactory pageViewModelFactory)
     {
@@ -71,11 +75,24 @@ public partial class PageSearchViewModel : ObservableObject
         _routingService = routingService;
         _logger = logger;
         _pageViewModelFactory = pageViewModelFactory;
+        _pageRepository = pageRepository;
 
         _routingService.RouteChangedEvent += _routingService_RouteChangedEvent;
+        _pageRepository.LoadedEvent += _pageRepository_LoadedEvent;
     }
 
-    private void _routingService_RouteChangedEvent(object sender, RouteChangedEventArgs eventArgs)
+    private PageSearchRouteData? _currentRouteData = null;
+    private void _pageRepository_LoadedEvent(object? sender, EventArgs eventArgs)
+    {
+        _logger.LogDebug($"[_pageRepository_LoadedEvent] fired");
+
+        // If there is no current route set then a 'RouteChangedEvent' is pending which will do the same.
+        if (_currentRouteData != null)
+        {
+            SetSearchQuery(_currentRouteData);
+        }
+    }
+    private void _routingService_RouteChangedEvent(object? sender, RouteChangedEventArgs eventArgs)
     {
         _logger.LogDebug($"[_routingService_RouteChangedEvent] route={eventArgs.Route}");
 
@@ -89,6 +106,10 @@ public partial class PageSearchViewModel : ObservableObject
     [RelayCommand]
     public async void SetSearchQuery(PageSearchRouteData searchQuery)
     {
+        // Keep track of the currently loading route.
+        // This is useful when we need to reload because data becomes avaliable.
+        _currentRouteData = searchQuery;
+
         // Clear the search results before doing any asynchronous operation.
         LoadPages(new List<PageData>());
 

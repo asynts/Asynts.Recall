@@ -32,7 +32,7 @@ public partial class QueryBoxViewModel : ObservableObject
         _routingService.RouteChangedEvent += _routingService_RouteChangedEvent;
     }
 
-    private void _routingService_RouteChangedEvent(object sender, RouteChangedEventArgs eventArgs)
+    private void _routingService_RouteChangedEvent(object? sender, RouteChangedEventArgs eventArgs)
     {
         Query = eventArgs.Route.NormalizedQuery();
         RawQuery = eventArgs.Route.RawQuery();

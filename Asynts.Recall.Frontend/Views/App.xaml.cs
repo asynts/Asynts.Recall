@@ -46,13 +46,7 @@ namespace Asynts.Recall.Frontend.Views
             // Allow the backend to dispatch to the event loop.
             services.AddSingleton<Dispatcher>(Dispatcher);
 
-            services.AddSingleton<IPageRepository>(services =>
-            {
-                var contentRepository = new MemoryPageRepository();
-                contentRepository.LoadExampleData();
-                return contentRepository;
-            });
-
+            services.AddSingleton<IPageRepository, MemoryPageRepository>();
             services.AddSingleton<ISearchService, SearchService>();
             services.AddSingleton<IRoutingService, RoutingService>();
             services.AddTransient<IPageParserService, PageParserService>();

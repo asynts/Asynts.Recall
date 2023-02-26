@@ -1,8 +1,8 @@
 --- Metadata
 {
 	"id": "3c3d7dc5-664a-4076-b3e6-11e26ebbc253",
-	"title": "",
-	"tags: [ "type/debugging-protocol", "language/csharp/", "framework/wpf/", "project/recall/wpf/", "topic/asynchronous/" ]
+	"title": "Using 'await' to replace 'Task.ContinueWith' in UI application",
+	"tags": [ "type/debugging-protocol", "language/csharp/", "framework/wpf/", "project/recall/wpf/", "topic/asynchronous/" ]
 }
 --- Comment
 This is an old debugging protocol.

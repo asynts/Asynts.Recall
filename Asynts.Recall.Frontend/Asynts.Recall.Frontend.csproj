@@ -8,11 +8,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\0001_2023-02-26_Make-Views-Behave-In-Designer.md" />
+    <None Remove="Resources\0002_2023-02-26_OnClick-Handler-Using-MVVM.md" />
+    <None Remove="Resources\0003_2023-02-26_Rewriting-ContinueWith-Using-Await.md" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Remove="Views\App.xaml" />
   </ItemGroup>
 
   <ItemGroup>
     <ApplicationDefinition Include="Views\App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\0001_2023-02-26_Make-Views-Behave-In-Designer.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\0002_2023-02-26_OnClick-Handler-Using-MVVM.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\0003_2023-02-26_Rewriting-ContinueWith-Using-Await.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

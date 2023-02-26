@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Threading;
@@ -25,8 +26,7 @@ public class RoutingService : IRoutingService
 
     public bool NavigateBackPossible => locations.Count >= 2;
 
-
-    public event RouteChangedHandler? RouteChangedEvent;
+    public event EventHandler<RouteChangedEventArgs>? RouteChangedEvent;
 
     public bool TryBack()
     {

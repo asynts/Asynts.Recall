@@ -8,7 +8,9 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Threading;
 
 namespace Asynts.Recall.Frontend.ViewModels;
@@ -42,9 +44,19 @@ public partial class MainWindowViewModel : ObservableObject
             InterestingTerms = new List<string>(),
             RawText = "",
         });
+
+        LoadFromDiskAsync();
     }
 
-    private void _routingService_RouteChangedEvent(object sender, RouteChangedEventArgs eventArgs)
+    // FIXME: This should not be here at all.
+    //        Maybe move this to some service?
+    private async void LoadFromDiskAsync()
+    {
+        var directoryPath = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "Resources");
+        await _pageRepository.LoadFromDiskAsync(directoryPath);
+    }
+
+    private void _routingService_RouteChangedEvent(object? sender, RouteChangedEventArgs eventArgs)
     {
         _logger.LogDebug($"[_routingService_RouteChangedEvent] route={eventArgs.Route}");
 

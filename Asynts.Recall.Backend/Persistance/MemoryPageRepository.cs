@@ -1,13 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 using Asynts.Recall.Backend.Persistance.Data;
+using Asynts.Recall.Backend.Services;
 
 namespace Asynts.Recall.Backend.Persistance;
 
 public class MemoryPageRepository : IPageRepository
 {
+    private readonly IPageParserService _pageParserService;
+    private readonly Dispatcher _dispatcher;
+
+    public MemoryPageRepository(IPageParserService pageParserService, Dispatcher dispatcher)
+    {
+        _pageParserService = pageParserService;
+        _dispatcher = dispatcher;
+    }
+
     private Dictionary<string, PageData> pages = new Dictionary<string, PageData>();
+
+    public event EventHandler? LoadedEvent;
 
     public void Add(PageData page)
     {
@@ -28,9 +46,40 @@ public class MemoryPageRepository : IPageRepository
         return page!;
     }
 
+    // This should be part of 'System.IO.Directory'!
+    private Task<string[]> GetFilesAsync(string path, CancellationToken cancellationToken = default)
+    {
+        return Task.Run(() =>
+        {
+            return Directory.GetFiles(path);
+        }, cancellationToken: cancellationToken);
+    }
+
+    private void NotifyLoaded()
+    {
+        _dispatcher.BeginInvoke(() => LoadedEvent?.Invoke(this, new EventArgs()));
+    }
+
+    // FIXME: Move this somewhere else.
+    public async Task LoadFromDiskAsync(string directoryPath, CancellationToken cancellationToken = default)
+    {
+        Debug.Assert(pages.Count == 0);
+
+        foreach (var filePath in await GetFilesAsync(directoryPath, cancellationToken))
+        {
+            var text = await File.ReadAllTextAsync(filePath, cancellationToken);
+            var pageData = _pageParserService.Parse(text);
+
+            Add(pageData);
+        }
+
+        NotifyLoaded();
+    }
+
+    // FIXME: Move this somewhere else.
     public void LoadExampleData()
     {
-        pages.Clear();
+        Debug.Assert(pages.Count == 0);
 
         Add(new PageData
         {
@@ -56,5 +105,7 @@ public class MemoryPageRepository : IPageRepository
                 "special/",
             },
         });
+
+        NotifyLoaded();
     }
 }

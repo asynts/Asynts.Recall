@@ -70,9 +70,12 @@ namespace Asynts.Recall.Backend.Services;
 public class PageParserService : IPageParserService
 {
     private readonly JSchema _metadataSchema;
+    private readonly ILogger _logger;
 
-    public PageParserService()
+    public PageParserService(ILogger<PageParserService> logger)
     {
+        _logger = logger;
+
         _metadataSchema = JSchema.Parse("""
         {
             "type": "object",
@@ -135,6 +138,8 @@ public class PageParserService : IPageParserService
     }
     private MetadataInfo ExtractMetadataFromSection(SectionInfo sectionInfo)
     {
+        _logger.LogDebug($"[ExtractMetadataFromSection] {sectionInfo.Content}");
+
         Debug.Assert(sectionInfo.Name == "Metadata");
 
         MetadataInfo? metadata = null;
@@ -146,9 +151,7 @@ public class PageParserService : IPageParserService
             validatingReader.Schema = _metadataSchema;
 
             var serializer = new JsonSerializer();
-
             metadata = serializer.Deserialize<MetadataInfo>(validatingReader);
-            //metadata = JsonConvert.DeserializeObject<MetadataInfo>(sectionInfo.Content);
         }
         if (metadata == null)
         {

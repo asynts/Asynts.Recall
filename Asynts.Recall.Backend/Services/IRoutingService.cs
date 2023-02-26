@@ -15,8 +15,6 @@ public class RouteChangedEventArgs : EventArgs
     }
 }
 
-public delegate void RouteChangedHandler(object sender, RouteChangedEventArgs eventArgs);
-
 public interface IRoutingService
 {
     public RouteData Route { get; }
@@ -24,7 +22,7 @@ public interface IRoutingService
     public bool NavigateBackPossible { get; }
 
     // Emitted in UI thread.
-    public event RouteChangedHandler? RouteChangedEvent;
+    public event EventHandler<RouteChangedEventArgs>? RouteChangedEvent;
 
     public void Navigate(RouteData route);
     public void Replace(RouteData route);
