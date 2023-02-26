@@ -1,18 +1,30 @@
+--- Metadata
+{
+    "id": "721bf454-fc96-4d98-9a69-10596579cc7e",
+    "title": "Make views behave in the designer",
+    "tags": [ "type/debugging-protocol", "language/csharp/", "framework/wpf/", "tool/visual-studio/", "project/recall/wpf/" ]
+}
+--- Summary
+The namespace `xmlns:d="http://schemas.microsoft.com/expression/blend/2008"` can be used to provide an additional value that is ignored in
+the running application, e.g. `<Label Content="foo" d:Content="bar" />`.  By providing a default constructor in the view model we can often
+avoid manually defining `d:` properties by providing suitable defaults.
+--- Comment
+This is an old debugging protocol.
+--- Details
 ### Notes
-
 -	Currently, the view model doesn't seem to be accessible by XAML.
 
 -	This seems to be called "design time data":
-	https://learn.microsoft.com/en-us/visualstudio/xaml-tools/xaml-designtime-data?view=vs-2022
+    https://learn.microsoft.com/en-us/visualstudio/xaml-tools/xaml-designtime-data?view=vs-2022
 
 -	Essentially, you just say `d:Whatever` next to your `Whatever` binding and that will be used in the designer instead.
-	It is also possible to define resources that can be referenced for e.g. arrays:
+    It is also possible to define resources that can be referenced for e.g. arrays:
 
-	```xaml
+    ```xaml
     <!-- Typically, these namespaces would be defined on the top level 'UserControl', but here for simplicity: -->
     <Grid
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d">
@@ -31,7 +43,7 @@
         <local:TagList DataContext="{Binding Path=Tags}" d:DataContext="{StaticResource DesignTimeTags}" Grid.Row="1" Grid.Column="0" />
         <Label Content="{Binding Path=Contents}" d:Content="{StaticResource DesignTimeContents}" Grid.Row="2" Grid.Column="0" Background="Green" />
     </Grid>
-	```
+    ```
 
 -   I was able to get this working by providing a default constructor in `PageViewModel`.
 

@@ -1,3 +1,17 @@
+--- Metadata
+{
+	"id": "7539227b-c305-430b-962b-fecf2026e6b4",
+	"title": "Assign 'Click' handler to 'Grid' using MVVM",
+	"tags": [ "type/debugging-protocol", "language/csharp/", "framework/wpf/", "project/recall/wpf/" ]
+}
+--- Comment
+This is an old debugging protocol.
+--- Summary
+Without MVVM event handlers can be assigned directly in the code-behind file.
+However, with MVVM we need to create commands which can not be assigned directly to events.
+The solution is to import the `xmlns:i="http://schemas.microsoft.com/xaml/behaviors"` namespace and to use
+`<i:Interaction.Triggers>`, `<i:EventTrigger>` and `<i:InvokeCommandAction`. 
+--- Details
 ### Notes
 
 -   Currently, when a page is pressed we handle this in `Page.xaml.cs`:

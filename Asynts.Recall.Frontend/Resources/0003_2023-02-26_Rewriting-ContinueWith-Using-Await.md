@@ -1,3 +1,17 @@
+--- Metadata
+{
+	"id": "3c3d7dc5-664a-4076-b3e6-11e26ebbc253",
+	"title": "",
+	"tags: [ "type/debugging-protocol", "language/csharp/", "framework/wpf/", "project/recall/wpf/", "topic/asynchronous/" ]
+}
+--- Comment
+This is an old debugging protocol.
+--- Summary
+We can use `async` and `await` to simplify code that uses `Task.ContinueWith`.
+The trick here is, that the code in asynchronous functions runs in the calling synchronization context.
+Thus we stay in the UI thread and can safely await tasks that are provided by the backend.
+The backend can use `Task.Run` to create a task from a thread pool which will use a different synchronization context.
+--- Details
 ### Notes
 
 -	If I start the application, the `PageSearch` view is empty.
