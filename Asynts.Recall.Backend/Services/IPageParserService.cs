@@ -16,7 +16,7 @@ public class ParserException : FormatException
     public string RawMessage { get; private set; }
 }
 
-public interface IPageParseService
+public interface IPageParserService
 {
     /// <exception cref="ParserException" />
     PageData Parse(string input);

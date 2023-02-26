@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Asynts.Recall.Backend.Persistance.Data;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
+using Newtonsoft.Json.Schema.Generation;
 
 namespace Asynts.Recall.Backend.Services;
 
@@ -60,11 +65,33 @@ namespace Asynts.Recall.Backend.Services;
 /// This can be very long and is only shown when an individual page is viewed.
 /// </code>
 /// </example>
-public class PageParserService : IPageParseService
+public class PageParserService : IPageParserService
 {
-    public PageParserService()
-    {
+    private readonly ILogger _logger;
+    private readonly JSchema _metadataSchema;
 
+    public PageParserService(ILogger<PageParserService> logger)
+    {
+        _logger = logger;
+
+        _metadataSchema = JSchema.Parse("""
+        {
+            "type": "object",
+            "properties": {
+                "id": { "type": "integer" },
+                "title": { "type": "string" ] },
+                "tags": {
+                    "type": [ "array" ],
+                    "items": { "type": [ "string" ] }
+                }
+            },
+            "required": [
+                "id",
+                "title",
+                "tags"
+            ]
+        }
+        """);
     }
 
     public PageData Parse(string input)
@@ -76,8 +103,35 @@ public class PageParserService : IPageParseService
 
     private PageData ExtractDataFromSections(IDictionary<string, SectionInfo> sections)
     {
-        // FIXME
-        throw new NotImplementedException();
+        JObject metadata;
+        try
+        {
+            metadata = JObject.Parse(sections["Metadata"].Content);
+        } catch (JsonReaderException)
+        {
+            throw new ParserException(sections["Metadata"].Line, "failed to parse metadata");
+        }
+        if (!metadata.IsValid(_metadataSchema))
+        {
+            throw new ParserException(sections["Metadata"].Line, "failed to validate metadata");
+        }
+
+        string summary = sections["Summary"].Content;
+
+        string? details = null;
+        if (sections.TryGetValue("Details", out var detailsSection))
+        {
+            details = detailsSection.Content;
+        }
+
+        return new PageData
+        {
+            Id = metadata.Value<long>("id"),
+            Title = metadata.Value<string>("title")!,
+            Summary = summary,
+            Details = details,
+            Tags = metadata.Value<List<string>>("tags")!,
+        };
     }
 
     private void VerifySections(IDictionary<string, SectionInfo> sections)
