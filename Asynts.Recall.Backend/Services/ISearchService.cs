@@ -13,15 +13,12 @@ public interface ISearchService
 {
     IEnumerable<PageData> Search(PageSearchRouteData searchQuery, CancellationToken cancellationToken = default);
 
-    async Task<IList<PageData>> SearchAsync(PageSearchRouteData searchQuery, CancellationToken cancellationToken = default)
+    Task<IList<PageData>> SearchAsync(PageSearchRouteData searchQuery, CancellationToken cancellationToken = default)
     {
-        var pages = await Task.Run(() =>
+        return Task.Run<IList<PageData>>(() =>
         {
-            return Search(searchQuery, cancellationToken).ToList();
-        }, cancellationToken: cancellationToken);
-
-        cancellationToken.ThrowIfCancellationRequested();
-
-        return pages;
+            return Search(searchQuery, cancellationToken: cancellationToken)
+                .ToList();
+        });
     }
 }

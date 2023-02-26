@@ -102,6 +102,7 @@ public partial class PageSearchViewModel : ObservableObject
         }
     }
 
+    // Must only cancel from UI thread, otherwise there are synchronization issues.
     private CancellationTokenSource? searchServiceCancellationSource = null;
     [RelayCommand]
     public async void SetSearchQuery(PageSearchRouteData searchQuery)
@@ -121,19 +122,22 @@ public partial class PageSearchViewModel : ObservableObject
         searchServiceCancellationSource?.Dispose();
         searchServiceCancellationSource = new CancellationTokenSource();
 
+        var cancellationToken = searchServiceCancellationSource.Token;
+
         IList<PageData> pages;
-        try
-        {
-            pages = await _searchService.SearchAsync(searchQuery, searchServiceCancellationSource.Token);
-            _logger.LogDebug($"[SetSearchQuery]: got result");
+        try {
+            pages = await _searchService.SearchAsync(searchQuery, cancellationToken: cancellationToken);
         }
         catch (OperationCanceledException)
         {
-            _logger.LogDebug($"[SetSearchQuery]: aborted");
             return;
         }
 
-        // FIXME: I hope this runs in the correct synchronization context!
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return;
+        }
+
         LoadPages(pages);
     }
 
