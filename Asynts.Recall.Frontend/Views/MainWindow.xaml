@@ -16,27 +16,36 @@
                 <MenuItem Header="_Navigate back" Command="{Binding NavigateBackCommand}" IsEnabled="{Binding NavigateBackEnabled}" />
             </MenuItem>
         </Menu>
-        <StackPanel>
-            <local:QueryBox x:Name="refQueryBox" />
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
 
-            <Separator Background="Black" Margin="0" />
-
-            <ContentControl>
-                <ContentControl.Resources>
-                    <DataTemplate DataType="{x:Type viewmodel:PageSearchViewModel}">
-                        <local:PageSearch DataContext="{Binding}" />
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodel:PageViewModel}">
-                        <local:Page DataContext="{Binding}" Padding="4px" ShowDetails="True" />
-                    </DataTemplate>
-                </ContentControl.Resources>
-                <ContentControl.Content>
-                    <Binding Path="CurrentViewModel" />
-                </ContentControl.Content>
-                <d:ContentControl.Content>
-                    <viewmodel:PageSearchViewModel />
-                </d:ContentControl.Content>
-            </ContentControl>
-        </StackPanel>
+            <local:QueryBox x:Name="refQueryBox" Grid.Row="0" Grid.Column="0" />
+            <Separator Background="Black" Margin="0" Grid.Row="1" Grid.Column="0" />
+            <ScrollViewer Grid.Row="2" Grid.Column="0">
+                <ContentControl>
+                    <ContentControl.Resources>
+                        <DataTemplate DataType="{x:Type viewmodel:PageSearchViewModel}">
+                            <local:PageSearch DataContext="{Binding}" />
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type viewmodel:PageViewModel}">
+                            <local:Page DataContext="{Binding}" Padding="4px" ShowDetails="True" />
+                        </DataTemplate>
+                    </ContentControl.Resources>
+                    <ContentControl.Content>
+                        <Binding Path="CurrentViewModel" />
+                    </ContentControl.Content>
+                    <d:ContentControl.Content>
+                        <viewmodel:PageSearchViewModel />
+                    </d:ContentControl.Content>
+                </ContentControl>
+            </ScrollViewer>
+        </Grid>
     </DockPanel>
 </Window>
