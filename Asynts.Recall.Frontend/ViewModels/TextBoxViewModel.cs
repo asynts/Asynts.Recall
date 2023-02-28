@@ -22,7 +22,7 @@ public partial class TextBoxViewModel : ObservableObject
     {
         get
         {
-            if (Text.IsEmpty())
+            if (Text.Length == 0)
             {
                 return Visibility.Hidden;
             }

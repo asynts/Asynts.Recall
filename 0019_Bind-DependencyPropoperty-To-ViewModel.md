@@ -13,6 +13,32 @@
 -	This talks about `<MultiBinding>` but I didn't read it completely:
 	https://stackoverflow.com/a/410681/8746648
 
+-	I got some issues with the source generation again, I need to delete the `obj` and `bin` folders all the time.
+
+-	I started up Visual Studio and it detected a "cycle" and was unable to load the `Asynts.Recall.Backend` project.
+	Restarting seems to help.
+
+-	I tried using this to bind the property to the view model but that doesn't work.
+	The view model `Text` isn't updated:
+
+	```xaml
+	<UserControl.Resources>
+        <Style TargetType="{x:Type local:TextBox}">
+            <Setter Property="Text" Value="{Binding Path=Text, Mode=TwoWay}" />
+        </Style>
+    </UserControl.Resources>
+	```
+
+-	I tried this but it doesn't work either:
+	```xaml
+	<UserControl.Style>
+        <Style TargetType="{x:Type local:TextBox}">
+            <Setter Property="Text" Value="{Binding Path=Text, Mode=TwoWay}" />
+            <d:Setter Property="PlaceholderText" Value="Placeholder..." />
+        </Style>
+    </UserControl.Style>
+	```
+
 ### Tasks
 
 -	Read about style in XAML:
@@ -23,3 +49,5 @@
 -	I suspect, that the style can be used to define this.
 
 -	I suspect, that `<MultiBinding>` is used to make this work.
+
+-	Try to debug the binding.
