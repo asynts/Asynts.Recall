@@ -12,6 +12,8 @@
 
 -	Dependency properties are extremely error prone because it looks at the type and silently discards it if it doesn't match.
 
+-	Dependency properties are defined in the code-behind and can't easily be exposed to the view-model.
+
 ### .NET
 
 -	The `CancellationToken` abstraction does not have any sort of synchronization mechanism.

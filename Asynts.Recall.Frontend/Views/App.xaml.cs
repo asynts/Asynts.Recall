@@ -10,6 +10,7 @@ using System.Windows.Threading;
 using System.Runtime.Serialization;
 using Asynts.Recall.Backend.Services;
 using Microsoft.Extensions.Logging;
+using Asynts.Recall.Frontend.Utility;
 
 namespace Asynts.Recall.Frontend.Views
 {
@@ -52,6 +53,7 @@ namespace Asynts.Recall.Frontend.Views
             services.AddTransient<IPageParserService, PageParserService>();
 
             services.AddSingleton<ObjectIDGenerator>();
+            services.AddSingleton<RuntimeModeMarker>();
 
             services.AddTransient<PageViewModelFactory>();
             services.AddTransient<PageSearchViewModel>();

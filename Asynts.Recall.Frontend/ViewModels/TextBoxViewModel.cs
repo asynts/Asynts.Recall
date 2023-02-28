@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Asynts.Recall.Frontend.Utility;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,13 @@ public partial class TextBoxViewModel : ObservableObject
     public TextBoxViewModel()
     {
         text = "";
+        placeholderText = "Placeholder...";
+    }
+
+    public TextBoxViewModel(RuntimeModeMarker runtimeModeMarker)
+    {
+        text = "";
+        placeholderText = "";
     }
 
     public Visibility PlaceholderVisibility
@@ -24,11 +32,11 @@ public partial class TextBoxViewModel : ObservableObject
         {
             if (Text.Length == 0)
             {
-                return Visibility.Hidden;
+                return Visibility.Visible;
             }
             else
             {
-                return Visibility.Visible;
+                return Visibility.Hidden;
             }
         }
     }
@@ -49,4 +57,7 @@ public partial class TextBoxViewModel : ObservableObject
             OnPropertyChanged(nameof(PlaceholderVisibility));
         }
     }
+
+    [ObservableProperty]
+    public string placeholderText;
 }

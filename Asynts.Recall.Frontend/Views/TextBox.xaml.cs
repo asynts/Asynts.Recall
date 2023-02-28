@@ -35,6 +35,18 @@ namespace Asynts.Recall.Frontend.Views
             {
                 DataContext = App.Current.Services.GetRequiredService<TextBoxViewModel>();
             }
+
+            SetBindingToViewModel("Text", TextProperty);
+            SetBindingToViewModel("PlaceholderText", PlaceholderTextProperty);
+        }
+
+        private void SetBindingToViewModel(string viewModelPropertyName, DependencyProperty viewProperty)
+        {
+            var binding = new Binding();
+            binding.Path = new PropertyPath(viewModelPropertyName);
+            binding.Mode = BindingMode.TwoWay;
+            binding.Source = DataContext;
+            SetBinding(viewProperty, binding);
         }
 
         public string PlaceholderText

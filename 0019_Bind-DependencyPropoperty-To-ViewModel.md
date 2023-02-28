@@ -13,6 +13,8 @@
 -	This talks about `<MultiBinding>` but I didn't read it completely:
 	https://stackoverflow.com/a/410681/8746648
 
+	-	I don't think that is relevant here.
+
 -	I got some issues with the source generation again, I need to delete the `obj` and `bin` folders all the time.
 
 -	I started up Visual Studio and it detected a "cycle" and was unable to load the `Asynts.Recall.Backend` project.
@@ -39,15 +41,58 @@
     </UserControl.Style>
 	```
 
+-	My understanding is that `<MultiBinding>` allows multiple bindings to be combined with a converter.
+
+-	Essentially, I need a converter that converts the `Text` into `Visiblity`.
+
+-	This is a duplicate of this Stack Overflow question:
+	https://stackoverflow.com/q/15176115/8746648
+
+	-	Unfortunately, he did not find a solution except lifting up the state into the parent.
+
+-	All that I need is to define a binding between the dependency property and the view model.
+
+-	I tried using the following in the code-behind:
+	```csharp
+    public TextBox()
+    {
+        InitializeComponent();
+
+        // ...
+
+        SetBindingToViewModel("Text", TextProperty);
+        SetBindingToViewModel("PlaceholderText", PlaceholderTextProperty);
+    }
+
+    private void SetBindingToViewModel(string viewModelPropertyName, DependencyProperty viewProperty)
+    {
+        var binding = new Binding();
+        binding.Path = new PropertyPath(viewModelPropertyName);
+        binding.Mode = BindingMode.TwoWay;
+        binding.Source = DataContext;
+        SetBinding(viewProperty, binding);
+    }
+	```
+    And this worked for the `PlaceholderText`, but it doesn't seem that this worked for the `Text`.
+
+-   Now that I think about it, I am not really certain what I am even trying to do.
+
+    -   The value of the `Text` property lives in the `TextBoxViewModel`.
+
+    -   There should be a two-way binding with the normal `<TextBox>`.
+        Thus the text can be edited but it can also be edited from the view-model.
+
+    -   Finally, I want to expose this text property like this: `<local:TextBox Text="Initial text" />`.
+
 ### Tasks
 
--	Read about style in XAML:
-	https://learn.microsoft.com/en-us/dotnet/desktop/wpf/controls/styles-templates-overview?view=netdesktop-7.0
+-   Research how two-way bindings work conceptually.
+
+-   Research how to properly "wrap" existing components.
+    This describes what I want to do.
 
 ### Theories
 
--	I suspect, that the style can be used to define this.
-
--	I suspect, that `<MultiBinding>` is used to make this work.
-
 -	Try to debug the binding.
+
+-	I suspect, the solution is to lift up the state.

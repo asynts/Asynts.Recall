@@ -8,29 +8,16 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=viewmodel:TextBoxViewModel, IsDesignTimeCreatable=True}">
-    <UserControl.Style>
-        <Style TargetType="{x:Type local:TextBox}">
-            <Setter Property="Text" Value="{Binding Path=Text, Mode=TwoWay}" />
-            <d:Setter Property="PlaceholderText" Value="Placeholder..." />
-        </Style>
-    </UserControl.Style>
-    
-    <!--<UserControl.Resources>
-        <Style TargetType="{x:Type local:TextBox}">
-        </Style>
-    </UserControl.Resources>-->
-
     <Grid Margin="4px">
-        <!-- FIXME: I would like to bind to the view model instead. -->
         <TextBlock
             Margin="5px,2px"
-            Text="{Binding Path=PlaceholderText, RelativeSource={RelativeSource AncestorType={x:Type local:TextBox}}}"
-            Visibility="{Binding Path=PlaceholderVisibility}"
+            Text="{Binding PlaceholderText}"
+            Visibility="{Binding PlaceholderVisibility}"
             Foreground="Gray"
             Grid.Row="0"
             Grid.Column="0" />
         <TextBox
-            Text="{Binding Path=Text}"
+            Text="{Binding Path=Text, Mode=TwoWay}"
             Padding="2px"
             Background="Transparent"
             Grid.Row="0"
