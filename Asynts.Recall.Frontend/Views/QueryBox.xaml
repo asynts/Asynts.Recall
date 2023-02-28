@@ -23,5 +23,6 @@
                            Foreground="Gray" />
             <TextBox Name="refRawQuery" Text="{Binding Path=RawQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Padding="2px" Background="Transparent" KeyDown="OnKeyDownHandler" />
         </Grid>
+        <local:TextBox />
     </StackPanel>
 </UserControl>

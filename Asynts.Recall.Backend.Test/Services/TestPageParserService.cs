@@ -1,3 +1,6 @@
+using Microsoft.Extensions.Logging;
+using Moq;
+
 namespace Asynts.Recall.Backend.Services.Test;
 
 public class Tests
@@ -7,7 +10,8 @@ public class Tests
     [SetUp]
     public void Setup()
     {
-        pageParserService = new PageParserService();
+        var mockLogger = new Mock<ILogger<PageParserService>>();
+        pageParserService = new PageParserService(logger: mockLogger.Object);
     }
 
     [Test]

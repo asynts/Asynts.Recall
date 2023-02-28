@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		0013_todo.md = 0013_todo.md
 		0016_Markdown-Syntax-Highlight-For-Custom-Extension.md = 0016_Markdown-Syntax-Highlight-For-Custom-Extension.md
 		0017_No-Scrollbar-In-ContentControl.md = 0017_No-Scrollbar-In-ContentControl.md
+		0018_Proper-Placeholder-Text.md = 0018_Proper-Placeholder-Text.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asynts.Recall.Backend", "Asynts.Recall.Backend\Asynts.Recall.Backend.csproj", "{5277F584-9275-45BC-B603-D2683ED102D4}"
