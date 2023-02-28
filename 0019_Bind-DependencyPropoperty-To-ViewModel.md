@@ -84,6 +84,14 @@
 
     -   Finally, I want to expose this text property like this: `<local:TextBox Text="Initial text" />`.
 
+-   This talks about how to extend components in UWP:
+    https://stackoverflow.com/q/47804109/8746648
+
+    -   This suggests that it's possible to inherit from `<TextBox>` and then add one custom dependency property.
+
+-   This is my exact question with `<TextBox>` watermark:
+    https://putridparrot.com/blog/basics-of-extending-a-wpf-control/
+
 ### Tasks
 
 -   Research how two-way bindings work conceptually.
